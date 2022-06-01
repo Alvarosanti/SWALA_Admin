@@ -11,7 +11,10 @@ app.use(cors());
 app.use(express.json());
 
 //routes
-app.get('/route 1', (req, res) => res.send('Json routes 1'))
-app.get('/route 2', (req, res) => res.send('Json routes 2'))
+app.use('/api/order', require('./src/routes/OrderRoutes'))
+app.use('/api/product', require('./src/routes/ProductRoutes'))
+app.use('/api/provider', require('./src/routes/ProviderRoutes'))
+app.use('/api/resources', require('./src/routes/ResourceRoutes'))
+app.use('/api/user', require('./src/routes/UserRoutes'))
 
 module.exports = app;
