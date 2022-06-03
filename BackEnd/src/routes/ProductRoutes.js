@@ -1,13 +1,11 @@
 const { Router } = require('express');
 const router = Router();
+const productsController = require('../controllers/ProductController')
 
-router.route('/')
-    .get((req, res) => res.json({ message: 'GET products' }))
-    .post((req, res) => res.json({ message: 'POST products' }))
-
-router.route('/:id')
-    .get((req, res) => res.json({ tittle: 'tittle product' }))
-    .put((req, res) => res.json({ message: 'product updated' }))
-    .delete((req, res) => res.json({ message: 'product delete' }))
+router.route('/').get(productsController.getProducts)
+router.route('/createProduct').post(productsController.createProduct)
+router.route('/:id').get(productsController.getOneProduct)
+router.route('/updateProduct').put(productsController.updateProduct)
+router.route('/deleteProduct').delete(productsController.deleteProduct)
 
 module.exports = router;
