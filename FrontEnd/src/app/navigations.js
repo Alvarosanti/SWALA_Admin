@@ -35,6 +35,23 @@ export const navigations = [
         ],
     },
     {
+        name: 'Productos',
+        icon: 'computer',
+        children: [
+            {
+                name: 'Agregar productos',
+                iconText: 'AP',
+                path: '/producto/agregar',
+            },
+            {
+                name: 'Listar productos',
+                iconText: 'LP',
+                path: '/producto/listar',
+            },
+        ],
+    },
+
+    {
         label: 'Components',
         type: 'label',
     },
@@ -126,11 +143,5 @@ export const navigations = [
                 iconText: 'E',
             },
         ],
-    },
-    {
-        name: 'Documentation',
-        icon: 'launch',
-        type: 'extLink',
-        path: 'http://demos.ui-lib.com/matx-react-doc/',
     },
 ]

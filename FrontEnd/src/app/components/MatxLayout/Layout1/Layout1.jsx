@@ -1,4 +1,3 @@
-import Footer from '../../Footer/Footer'
 import Layout1Topbar from './Layout1Topbar'
 import { MatxSuspense } from 'app/components'
 import Layout1Sidenav from './Layout1Sidenav'
@@ -116,9 +115,6 @@ const Layout1 = () => {
                                 <Outlet />
                             </MatxSuspense>
                         </Box>
-                        {settings.footer.show && !settings.footer.fixed && (
-                            <Footer />
-                        )}
                     </StyledScrollBar>
                 )}
 
@@ -137,13 +133,9 @@ const Layout1 = () => {
                                 <Outlet />
                             </MatxSuspense>
                         </Box>
-                        {settings.footer.show && !settings.footer.fixed && (
-                            <Footer />
-                        )}
                     </ContentBox>
                 )}
 
-                {settings.footer.show && settings.footer.fixed && <Footer />}
             </LayoutContainer>
             {settings.secondarySidebar.show && <SecondarySidebar />}
         </Layout1Root>
