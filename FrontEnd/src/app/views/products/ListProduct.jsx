@@ -28,7 +28,7 @@ const ListProduct = () => {
                         ]}
                     />
                 </div>
-                <SimpleCard title="Pagination Table">
+                <SimpleCard title="Productos">
                     <PaginationTable />
                 </SimpleCard>
             </Container>
