@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { SimpleCard, Breadcrumb } from '../../../app/components'
-import SimpleForm from '../../views/material-kit/forms/SimpleForm'
 import { Span } from 'app/components/Typography'
 import { styled } from '@mui/system'
-import {
-  Button,
-  Icon,
-  Grid,
-} from '@mui/material'
+import { Button, Icon, Grid, } from '@mui/material'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 
 
@@ -47,6 +42,10 @@ const AddProduct = () => {
       [event.target.name]: event.target.value,
     })
   }
+
+  useEffect(() => {
+    //
+  })
 
   const {
     firstName,

@@ -1,5 +1,4 @@
-import React from 'react'
-import PaginationTable from '../../views/material-kit/tables/PaginationTable'
+import React, { useState, useEffect } from 'react'
 import { SimpleCard, Breadcrumb } from '../../../app/components'
 import { styled, Box } from '@mui/system'
 import {
@@ -13,6 +12,7 @@ import {
     TablePagination,
     Avatar,
 } from '@mui/material'
+import axios from 'axios'
 
 const Container = styled('div')(({ theme }) => ({
     margin: '30px',
@@ -47,10 +47,12 @@ const StyledTable = styled(Table)(({ theme }) => ({
     },
 }))
 
+const apiUrl = 'http://localhost:4000/api'
 
 const ListProduct = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5)
     const [page, setPage] = React.useState(0)
+    const [products, setProduct] = useState([])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
@@ -60,72 +62,18 @@ const ListProduct = () => {
         setRowsPerPage(+event.target.value)
         setPage(0)
     }
-    const subscribarList = [
-        {
-            name: 'john doe',
-            date: '18 january, 2019',
-            amount: 1000,
-            status: 'close',
-            company: 'ABC Fintech LTD.',
-        },
-        {
-            name: 'kessy bryan',
-            date: '10 january, 2019',
-            amount: 9000,
-            status: 'open',
-            company: 'My Fintech LTD.',
-        },
-        {
-            name: 'kessy bryan',
-            date: '10 january, 2019',
-            amount: 9000,
-            status: 'open',
-            company: 'My Fintech LTD.',
-        },
-        {
-            name: 'james cassegne',
-            date: '8 january, 2019',
-            amount: 5000,
-            status: 'close',
-            company: 'Collboy Tech LTD.',
-        },
-        {
-            name: 'lucy brown',
-            date: '1 january, 2019',
-            amount: 89000,
-            status: 'open',
-            company: 'ABC Fintech LTD.',
-        },
-        {
-            name: 'lucy brown',
-            date: '1 january, 2019',
-            amount: 89000,
-            status: 'open',
-            company: 'ABC Fintech LTD.',
-        },
-        {
-            name: 'lucy brown',
-            date: '1 january, 2019',
-            amount: 89000,
-            status: 'open',
-            company: 'ABC Fintech LTD.',
-        },
-        {
-            name: 'lucy brown',
-            date: '1 january, 2019',
-            amount: 89000,
-            status: 'open',
-            company: 'ABC Fintech LTD.',
-        },
-        {
-            name: 'lucy brown',
-            date: '1 january, 2019',
-            amount: 89000,
-            status: 'open',
-            company: 'ABC Fintech LTD.',
-        },
-    ]
 
+    useEffect(() => {
+        axios.get(`${apiUrl}/product`).then(
+            (response) => {
+                setProduct(response.data)
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+    }, [])
+    
     return (
         <div>
             <Container>
@@ -138,7 +86,6 @@ const ListProduct = () => {
                     />
                 </div>
                 <SimpleCard title="Productos">
-                    {/* <PaginationTable /> */}
                     <Box width="100%" overflow="auto">
                         <StyledTable>
                             <TableHead>
@@ -151,31 +98,31 @@ const ListProduct = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {subscribarList
+                                {products
                                     .slice(
                                         page * rowsPerPage,
                                         page * rowsPerPage + rowsPerPage
                                     )
-                                    .map((subscriber, index) => (
+                                    .map((product, index) => (
                                         <TableRow key={index}>
                                             <TableCell >
                                                 <div style={{ position: 'relative', float: 'left', textAlign: 'right' }}>
                                                     <Avatar
-                                                        src={''}
+                                                        src={product.imagen}
                                                         sx={{ cursor: 'pointer' }}>
                                                     </Avatar>
                                                 </div>
                                                 <div style={{ paddingTop: '10px', paddingLeft: '50px' }}>
-                                                    {subscriber.name}
+                                                    {product.nombre}
                                                 </div>
                                             </TableCell>
                                             <TableCell align="left">
-                                                {subscriber.company}
+                                                {product.producto_id}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {subscriber.date}
+                                                {product.precio}
                                             </TableCell>
-                                            <TableCell>{subscriber.status}</TableCell>
+                                            <TableCell>{product.contenido}</TableCell>
                                             <TableCell>
                                                 <IconButton>
                                                     <Icon color="edi">edit</Icon>
@@ -192,7 +139,7 @@ const ListProduct = () => {
                             sx={{ px: 2 }}
                             rowsPerPageOptions={[5, 10, 25]}
                             component="div"
-                            count={subscribarList.length}
+                            count={products.length}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             backIconButtonProps={{
@@ -208,6 +155,7 @@ const ListProduct = () => {
                 </SimpleCard>
             </Container>
         </div>
+
     )
 }
 
