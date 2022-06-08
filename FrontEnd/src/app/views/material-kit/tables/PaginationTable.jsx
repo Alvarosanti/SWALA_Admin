@@ -7,7 +7,6 @@ import {
     TableCell,
     Icon,
     TablePagination,
-    Avatar,
 } from '@mui/material'
 import React from 'react'
 import { Box, styled } from '@mui/system'
@@ -116,11 +115,12 @@ const PaginationTable = () => {
             <StyledTable>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Nombre</TableCell>
-                        <TableCell>Codigo producto</TableCell>
-                        <TableCell>Precio/u</TableCell>
-                        <TableCell>Estado</TableCell>
-                        <TableCell>Acciones</TableCell>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Company</TableCell>
+                        <TableCell>Start Date</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Amount</TableCell>
+                        <TableCell>Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -131,16 +131,8 @@ const PaginationTable = () => {
                         )
                         .map((subscriber, index) => (
                             <TableRow key={index}>
-                                <TableCell >
-                                    <div style={{ position: 'relative', float: 'left', textAlign: 'right' }}>
-                                        <Avatar
-                                            src={''}
-                                            sx={{ cursor: 'pointer' }}>
-                                        </Avatar>
-                                    </div>
-                                    <div style={{ paddingTop: '10px', paddingLeft: '50px' }}>
-                                        {subscriber.name}
-                                    </div>
+                                <TableCell align="left">
+                                    {subscriber.name}
                                 </TableCell>
                                 <TableCell align="left">
                                     {subscriber.company}
@@ -149,18 +141,17 @@ const PaginationTable = () => {
                                     {subscriber.date}
                                 </TableCell>
                                 <TableCell>{subscriber.status}</TableCell>
+                                <TableCell>${subscriber.amount}</TableCell>
                                 <TableCell>
                                     <IconButton>
-                                        <Icon color="edi">edit</Icon>
-                                    </IconButton>
-                                    <IconButton>
-                                        <Icon color="error">do_not_disturb_alt</Icon>
+                                        <Icon color="error">close</Icon>
                                     </IconButton>
                                 </TableCell>
                             </TableRow>
                         ))}
                 </TableBody>
             </StyledTable>
+
             <TablePagination
                 sx={{ px: 2 }}
                 rowsPerPageOptions={[5, 10, 25]}
@@ -177,7 +168,7 @@ const PaginationTable = () => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
-        </Box >
+        </Box>
     )
 }
 
