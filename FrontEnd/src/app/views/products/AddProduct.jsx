@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { SimpleCard, Breadcrumb } from '../../../app/components'
 import { Span } from 'app/components/Typography'
 import { styled } from '@mui/system'
-import { Button, Icon, Grid, } from '@mui/material'
+import { Button, Icon, Grid, ImageList, ImageListItem, Typography, } from '@mui/material'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import { useNavigate, useLocation } from 'react-router'
 import axios from 'axios'
+import './imageUpload.css'
+import { keyBy } from 'lodash'
 
 
 const TextField = styled(TextValidator)(() => ({
@@ -33,7 +35,7 @@ const AddProduct = () => {
     date: new Date(),
     nombre: '',
     categoria: '',
-    iamgen: '',
+    imagen: [],
     precio: '',
     descripcion: '',
   })
@@ -42,13 +44,18 @@ const AddProduct = () => {
   const isEditable = searchParam.get('isEditable')
   const idProduct = searchParam.get('codigo')
   const navigate = useNavigate()
+  const [highlight, setHighlight] = useState(false)
+  const [post, setPost] = useState({
+    photos: [],
+  })
+  const { photos } = post
 
   useEffect(() => {
     if (!idProduct) {
       setProduct({
         nombre: '',
         categoria: '',
-        iamgen: '',
+        imagen: [],
         precio: '',
         descripcion: '',
       })
@@ -62,7 +69,11 @@ const AddProduct = () => {
       })
         .then((response) => {
           setProduct(response.data)
-        })
+        },
+          (error) => {
+            console.log(error)
+          }
+        )
     }
   }, [])
 
@@ -98,7 +109,179 @@ const AddProduct = () => {
     )
   }
 
+  const imgManage = (imagen) => {
+    Object.entries(imagen).forEach(([key, value]) => {
+      console.log(key)
+      console.log(value)
+    })
+    // {
+    //   product.map((item, index) => (
+    //     console.log(item, index)
+    //   ))
+    // }
+    return (
+      idProduct !== null
+        ? isEditable === 'true'
+          ? (
+            <div>
+              <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ fontWeight: '500' }}
+                >
+                  Imagenes
+                </Typography>
+                <ImageList cols={6}>
+                  {product !== null &&
+                    Object.entries(imagen).forEach(([key, value]) => {
+                      <ImageListItem key={key} sx={{ px: 1 }}>
+                        <img
+                          alt={key}
+                          src={value}
+                          srcSet={`${value}`}
+                          loading="lazy"
+                        />
+                      </ImageListItem>
+                    })
+                  }
+                </ImageList>
+              </Grid>
+            </div>
+          )
+          : (
+            <div>
+              <Grid item lg={12} md={12} sm={12} xs={12}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ fontWeight: '500' }}
+                >
+                  Imagenes
+                </Typography>
+                <ImageList cols={6}>
+                  {product !== null &&
+                    Object.entries(imagen).forEach(([key, value]) => {
+                      <ImageListItem key={key} sx={{ px: 1 }}>
+                        <img
+                          alt={key}
+                          src={value}
+                          srcSet={`${value}`}
+                          loading="lazy"
+                        />
+                      </ImageListItem>
+                    })
+                  }
+                </ImageList>
+              </Grid>
+            </div>
+          )
+        : <div>
+          <div className="custom-form-group">
+            <div
+              className={
+                highlight
+                  ? 'custom-file-drop-area highlight'
+                  : 'custom-file-drop-area'
+              }
+              onDragEnter={handlehighlight}
+              onDragOver={handlehighlight}
+              onDragLeave={handleunhighlight}
+              onDrop={handledrop}
+            >
+              <input
+                type="file"
+                name="photos"
+                placeholder="Enter photos"
+                multiple={true}
+                onChange={handleFileChange}
+                id="filephotos"
+              />
+              <label htmlFor="filephotos">Inserte imagenes</label>
+            </div>
+            <div
+              className={
+                photos.length > 0
+                  ? 'custom-file-preview files'
+                  : 'custom-file-preview'
+              }
+            >
+              {photos.length > 0 &&
+                photos.map((item, index) => (
+                  <div
+                    className="prev-img"
+                    key={index}
+                    data-imgindex={index}
+                  >
+                    <span onClick={handleDelete}>&times;</span>
+                    <img src={item.src} alt={item.name} />
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
 
+    )
+  }
+
+  const handlehighlight = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setHighlight(true)
+  }
+
+  const handleunhighlight = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setHighlight(false)
+  }
+
+  const handledrop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    let dt = e.dataTransfer
+    let files = dt.files
+    setHighlight(false)
+    handleFiles(files)
+    console.log(files)
+  }
+
+  const handleFiles = (files) => {
+    let photosArr = []
+    for (let file of files) {
+      let reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.addEventListener('load', () => {
+        let fileObj = {
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          src: reader.result,
+        }
+        photosArr.push(fileObj)
+        setPost({
+          ...post,
+          photos: [...photos, ...photosArr],
+        })
+      })
+    }
+  }
+  const handleFileChange = (e) => {
+    let files = e.target.files
+    console.log(files)
+    handleFiles(files)
+  }
+
+  const handleDelete = (e) => {
+    let target = e.target.parentElement
+    let targetindex = target.dataset.imgindex * 1
+    console.log(target, targetindex)
+    setPost({
+      ...post,
+      photos: [
+        ...photos.slice(0, targetindex),
+        ...photos.slice(targetindex + 1),
+      ],
+    })
+  }
 
   return (
     <Container>
@@ -120,7 +303,7 @@ const AddProduct = () => {
                   onChange={handleChange}
                   type="text"
                   name="nombre"
-                  value={nombre || ''}
+                  value={product.nombre || ''}
                   validators={['required']}
                   errorMessages={['this field is required']}
                   disabled={isEditable === 'false'}
@@ -135,18 +318,9 @@ const AddProduct = () => {
                   errorMessages={['this field is required']}
                   disabled={isEditable === 'false'}
                 />
-                <TextField
-                  label="Imagen"
-                  onChange={handleChange}
-                  type="text"
-                  name="imagen"
-                  value={imagen || ''}
-                  validators={['required']}
-                  errorMessages={['this field is required']}
-                  disabled={isEditable === 'false'}
-                />
+                {imgManage(imagen)}
+                <br />
               </Grid>
-
               <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
                 <TextField
                   label="Precio"

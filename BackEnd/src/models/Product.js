@@ -40,7 +40,10 @@ const ProductSchema = new Schema({
     sold: {
         type: Number,
         default: 0
-    }
+    },
+    estado: {
+        type: String,
+    },
 }
     , {
         timestamps: true,

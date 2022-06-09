@@ -7,7 +7,7 @@ const getProducts = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
-    const { producto_id, nombre, precio, descripcion, contenido, imagen, categoria, check, sold } = req.body;
+    const { producto_id, nombre, precio, descripcion, contenido, imagen, categoria, check, sold, estado } = req.body;
     const newProduct = new Product();
     newProduct.producto_id = producto_id;
     newProduct.nombre = nombre;
@@ -18,6 +18,7 @@ const createProduct = async (req, res) => {
     newProduct.categoria = categoria;
     newProduct.check = check;
     newProduct.sold = sold;
+    newProduct.estado = estado;
 
     await newProduct.save();
 
@@ -31,7 +32,7 @@ const getOneProduct = async (req, res) => {
 }
 
 const updateProduct = async (req, res) => {
-    const { producto_id, nombre, precio, descripcion, contenido, imagen, categoria, check, sold } = req.body;
+    const { producto_id, nombre, precio, descripcion, contenido, imagen, categoria, check, sold, estado } = req.body;
     const id = { _id: req.params.id };
     await Product.findOneAndUpdate(id, {
         producto_id,
@@ -42,7 +43,8 @@ const updateProduct = async (req, res) => {
         imagen,
         categoria,
         check,
-        sold
+        sold,
+        estado,
     })
     res.json({ message: 'product updated' })
 }

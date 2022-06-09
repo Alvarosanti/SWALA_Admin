@@ -107,14 +107,14 @@ const ListProduct = () => {
     }
 
     useEffect(() => {
-        axios.get(`${apiUrl}/product`).then(
-            (response) => {
+        axios.get(`${apiUrl}/product`)
+            .then((response) => {
                 setProduct(response.data)
             },
-            (error) => {
-                console.log(error)
-            }
-        )
+                (error) => {
+                    console.log(error)
+                }
+            )
     }, [])
 
     return (
@@ -152,7 +152,7 @@ const ListProduct = () => {
                                             <TableCell >
                                                 <div style={{ position: 'relative', float: 'left', textAlign: 'right' }}>
                                                     <Avatar
-                                                        src={product.imagen}
+                                                        src={product.imagen[0]}
                                                         sx={{ cursor: 'pointer' }}>
                                                     </Avatar>
                                                 </div>
