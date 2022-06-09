@@ -170,12 +170,22 @@ const AddProduct = () => {
                 />
               </Grid>
             </Grid>
-            <Button color="primary" variant="contained" type="submit">
-              <Icon>add_box</Icon>
-              <Span sx={{ pl: 1, textTransform: 'capitalize' }}>
-                Agregar
-              </Span>
-            </Button>
+            {
+              !isEditable || isEditable !== 'false'
+                ? (
+                  < Button color="primary" variant="contained" type="submit" >
+                    <Icon>add_box</Icon>
+                    <Span sx={{ pl: 1, textTransform: 'capitalize' }}>
+                      {
+                        isEditable === 'true'
+                          ? 'Actualizar' : 'Agregar'
+                      }
+                    </Span>
+                  </Button>
+                )
+                : ''
+            }
+            {' '}
             <Button
               className="w-full"
               sx={{ height: '37px' }}
@@ -189,7 +199,7 @@ const AddProduct = () => {
           </ValidatorForm>
         </div>
       </SimpleCard>
-    </Container>
+    </Container >
   )
 }
 
