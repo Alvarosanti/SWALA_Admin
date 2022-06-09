@@ -54,6 +54,7 @@ const ConfirmationDialog = ({
     text,
     title = 'confirm',
     onYesClick,
+    productState,
 }) => {
     return (
         <Dialog maxWidth="xs" open={open} onClose={onConfirmDialogClose}>
@@ -67,7 +68,7 @@ const ConfirmationDialog = ({
                         color="primary"
                         onClick={onYesClick}
                     >
-                        Yes
+                        {productState === 'habilitado' ? 'Si, deshabilitar' : 'Si, habilitar'}
                     </StyledButton>
                     <StyledButton
                         className="noBtn"
@@ -75,7 +76,7 @@ const ConfirmationDialog = ({
                         color="secondary"
                         onClick={onConfirmDialogClose}
                     >
-                        No
+                        Cancelar
                     </StyledButton>
                 </Controller>
             </DialogBox>

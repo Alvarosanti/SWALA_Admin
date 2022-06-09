@@ -9,6 +9,10 @@ const productsRoutes = [
     {
         path: '/producto/agregar',
         element: <AddProduct />,
+    },
+    {
+        path: '/producto/editar',
+        element: <AddProduct />,
     }
 ]
 

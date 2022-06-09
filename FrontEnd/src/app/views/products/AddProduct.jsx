@@ -4,6 +4,8 @@ import { Span } from 'app/components/Typography'
 import { styled } from '@mui/system'
 import { Button, Icon, Grid, } from '@mui/material'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
+import { useNavigate, useLocation } from 'react-router'
+import axios from 'axios'
 
 
 const TextField = styled(TextValidator)(() => ({
@@ -24,11 +26,45 @@ const Container = styled('div')(({ theme }) => ({
   },
 }))
 
+const apiUrl = 'http://localhost:4000/api'
 
 const AddProduct = () => {
-  const [state, setState] = useState({
+  const [product, setProduct] = useState({
     date: new Date(),
+    nombre: '',
+    categoria: '',
+    iamgen: '',
+    precio: '',
+    descripcion: '',
   })
+  const { search } = useLocation()
+  const searchParam = new URLSearchParams(search)
+  const isEditable = searchParam.get('isEditable')
+  const idProduct = searchParam.get('codigo')
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!idProduct) {
+      setProduct({
+        nombre: '',
+        categoria: '',
+        iamgen: '',
+        precio: '',
+        descripcion: '',
+      })
+    }
+  }, [idProduct])
+
+  useEffect(() => {
+    if (idProduct !== null && isEditable !== null) {
+      axios.get(`${apiUrl}/product/${idProduct}`, {
+        id: idProduct,
+      })
+        .then((response) => {
+          setProduct(response.data)
+        })
+    }
+  }, [])
 
   const handleSubmit = (event) => {
     // console.log("submitted");
@@ -37,35 +73,44 @@ const AddProduct = () => {
 
   const handleChange = (event) => {
     event.persist()
-    setState({
-      ...state,
+    setProduct({
+      ...product,
       [event.target.name]: event.target.value,
     })
   }
 
-  useEffect(() => {
-    //
-  })
-
   const {
-    firstName,
-    category,
-    price,
-    description,
-  } = state
+    nombre,
+    categoria,
+    imagen,
+    precio,
+    descripcion,
+  } = product
+
+  const tittleName = () => {
+    return (
+      idProduct !== null
+        ? isEditable === 'true'
+          ? 'Editar producto'
+          : 'Consultar producto'
+        : 'Agregar producto'
+
+    )
+  }
+
+
 
   return (
     <Container>
       <div className="breadcrumb">
         <Breadcrumb
           routeSegments={[
-            { name: 'Agregar', path: '/producto/agregar' },
+            { name: tittleName(), path: '/producto/agregar' },
             { name: 'Producto' },
           ]}
         />
       </div>
-      <SimpleCard title="Agregar producto">
-        {/* <SimpleForm /> */}
+      <SimpleCard title={tittleName()}>
         <div>
           <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
             <Grid container spacing={6}>
@@ -74,19 +119,31 @@ const AddProduct = () => {
                   label="Nombre producto"
                   onChange={handleChange}
                   type="text"
-                  name="productName"
-                  value={firstName || ''}
+                  name="nombre"
+                  value={nombre || ''}
                   validators={['required']}
                   errorMessages={['this field is required']}
+                  disabled={isEditable === 'false'}
                 />
                 <TextField
                   label="Categoria"
                   onChange={handleChange}
                   type="text"
-                  name="productCategory"
-                  value={category || ''}
+                  name="categoria"
+                  value={categoria || ''}
                   validators={['required']}
                   errorMessages={['this field is required']}
+                  disabled={isEditable === 'false'}
+                />
+                <TextField
+                  label="Imagen"
+                  onChange={handleChange}
+                  type="text"
+                  name="imagen"
+                  value={imagen || ''}
+                  validators={['required']}
+                  errorMessages={['this field is required']}
+                  disabled={isEditable === 'false'}
                 />
               </Grid>
 
@@ -95,19 +152,21 @@ const AddProduct = () => {
                   label="Precio"
                   onChange={handleChange}
                   type="text"
-                  name="productPrice"
-                  value={price || ''}
+                  name="precio"
+                  value={precio || ''}
                   validators={['required']}
                   errorMessages={['this field is required']}
+                  disabled={isEditable === 'false'}
                 />
                 <TextField
                   label="Descripcion"
                   onChange={handleChange}
                   type="text"
-                  name="productPrice"
-                  value={description || ''}
+                  name="descripcion"
+                  value={descripcion || ''}
                   validators={['required']}
                   errorMessages={['this field is required']}
+                  disabled={isEditable === 'false'}
                 />
               </Grid>
             </Grid>
@@ -116,6 +175,16 @@ const AddProduct = () => {
               <Span sx={{ pl: 1, textTransform: 'capitalize' }}>
                 Agregar
               </Span>
+            </Button>
+            <Button
+              className="w-full"
+              sx={{ height: '37px' }}
+              color="secondary"
+              variant="outlined"
+              type="submit"
+              onClick={() => navigate('/producto/listar')}
+            >
+              Volver
             </Button>
           </ValidatorForm>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { SimpleCard, Breadcrumb } from '../../../app/components'
+import { SimpleCard, Breadcrumb, ConfirmationDialog } from '../../../app/components'
 import { styled, Box } from '@mui/system'
 import {
     IconButton,
@@ -11,9 +11,12 @@ import {
     Icon,
     TablePagination,
     Avatar,
+    Tooltip,
 } from '@mui/material'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
+//useHistory(v5rrd) x useNavigate(v6^rrd)
 const Container = styled('div')(({ theme }) => ({
     margin: '30px',
     [theme.breakpoints.down('sm')]: {
@@ -53,7 +56,11 @@ const ListProduct = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5)
     const [page, setPage] = React.useState(0)
     const [products, setProduct] = useState([])
-
+    const [productId, setIdProduct] = useState(null)
+    const [productName, setNameProduct] = useState(null)
+    const [productState, setProductState] = useState('')
+    const [isOpenModalChangeState, setIsOpenModalChangeState] = useState(false)
+    const navigate = useNavigate()
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
     }
@@ -61,6 +68,42 @@ const ListProduct = () => {
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value)
         setPage(0)
+    }
+
+    const handleProductDetail = (idProduct) => {
+        navigate(`/producto/editar?codigo=${idProduct}&isEditable=false`)
+    }
+
+    const handleProductEdit = (idProduct) => {
+        navigate(`/producto/editar?codigo=${idProduct}&isEditable=true`)
+    }
+
+    const handleOpenModalChangeState = (idProduct, productName, productState) => {
+        setIsOpenModalChangeState(true)
+        setIdProduct(idProduct)
+        setNameProduct(productName)
+        setProductState(productState)
+    }
+
+    const handleCloseModal = () => {
+        setIsOpenModalChangeState(false)
+    }
+
+    const handleChangeState = () => {
+        // setIsLoading(true)
+        axios
+            .post(`${apiUrl}/productos/anular`, {
+                // id: productId,
+            })
+            .then(
+                (response) => {
+                    // setIsOpenModal(false)
+                    // loadTableData()
+                },
+                (error) => {
+                    // setIsOpenModal(false)
+                }
+            )
     }
 
     useEffect(() => {
@@ -73,8 +116,9 @@ const ListProduct = () => {
             }
         )
     }, [])
-    
+
     return (
+
         <div>
             <Container>
                 <div className="breadcrumb">
@@ -122,14 +166,47 @@ const ListProduct = () => {
                                             <TableCell align="left">
                                                 {product.precio}
                                             </TableCell>
-                                            <TableCell>{product.contenido}</TableCell>
+                                            <TableCell>{product.estado}</TableCell>
                                             <TableCell>
-                                                <IconButton>
-                                                    <Icon color="edi">edit</Icon>
-                                                </IconButton>
-                                                <IconButton>
-                                                    <Icon color="error">do_not_disturb_alt</Icon>
-                                                </IconButton>
+                                                <Tooltip title="Visualizar">
+                                                    <IconButton
+                                                        onClick={() => handleProductDetail(product._id)}
+                                                    >
+                                                        <Icon color="primary">visibility</Icon>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="Editar">
+                                                    <IconButton
+                                                        onClick={() => handleProductEdit(product._id)}
+                                                    >
+                                                        <Icon color="primary">edit</Icon>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                {
+                                                    product.estado === 'habilitado'
+                                                        ? (
+                                                            <>
+                                                                <Tooltip title="Deshabilitar">
+                                                                    <IconButton
+                                                                        onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
+                                                                    >
+                                                                        <Icon color="error">do_not_disturb_alt</Icon>
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                            </>
+                                                        )
+                                                        : (
+                                                            <>
+                                                                < Tooltip title="Habilitar">
+                                                                    <IconButton
+                                                                        onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
+                                                                    >
+                                                                        <Icon color="primary">check</Icon>
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                            </>
+                                                        )
+                                                }
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -154,7 +231,21 @@ const ListProduct = () => {
                     </Box >
                 </SimpleCard>
             </Container>
-        </div>
+            {/* modal confirmation state */}
+            <ConfirmationDialog
+                open={isOpenModalChangeState}
+                onConfirmDialogClose={handleCloseModal}
+                onYesClick={handleChangeState}
+                title={productState === 'habilitado' ? 'Deshabilitar producto' : 'Habilitar producto'}
+                text={
+                    <>
+                        {`¿Esta seguro que desea ${productState === 'habilitado' ? 'deshabilitar' : 'habilitar'} el producto`} {' '}<strong>{`${productName}`}</strong>{'?'}
+                    </>
+                }
+                productState={productState}
+            />
+        </div >
+
 
     )
 }
