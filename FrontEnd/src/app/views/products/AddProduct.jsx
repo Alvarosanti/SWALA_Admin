@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { SimpleCard, Breadcrumb } from '../../../app/components'
 import { Span } from 'app/components/Typography'
 import { styled } from '@mui/system'
-import { Button, Icon, Grid, ImageList, ImageListItem, Typography, } from '@mui/material'
+import { Button, Icon, Grid, ImageList, ImageListItem, Typography, Slide, Snackbar, Alert } from '@mui/material'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import { useNavigate, useLocation } from 'react-router'
 import axios from 'axios'
 import './imageUpload.css'
-import { keyBy } from 'lodash'
+import { green } from '@mui/material/colors'
 
 
 const TextField = styled(TextValidator)(() => ({
@@ -35,7 +35,7 @@ const AddProduct = () => {
     date: new Date(),
     nombre: '',
     categoria: '',
-    imagen: [],
+    images: [],
     precio: '',
     descripcion: '',
   })
@@ -46,29 +46,18 @@ const AddProduct = () => {
   const navigate = useNavigate()
   const [highlight, setHighlight] = useState(false)
   const [post, setPost] = useState({
-    photos: [],
+    images: [],
   })
-  const { photos } = post
-
-  useEffect(() => {
-    if (!idProduct) {
-      setProduct({
-        nombre: '',
-        categoria: '',
-        imagen: [],
-        precio: '',
-        descripcion: '',
-      })
-    }
-  }, [idProduct])
+  const { images } = post
+  const [open, setOpen] = useState(false);
+  const [Transition, setTransition] = useState(undefined);
 
   useEffect(() => {
     if (idProduct !== null && isEditable !== null) {
-      axios.get(`${apiUrl}/product/${idProduct}`, {
-        id: idProduct,
-      })
+      axios.get(`${apiUrl}/product/${idProduct}`)
         .then((response) => {
-          setProduct(response.data)
+          console.log(response.data.product)
+          setProduct(response.data.product)
         },
           (error) => {
             console.log(error)
@@ -76,10 +65,41 @@ const AddProduct = () => {
         )
     }
   }, [])
+  console.log('images det:', images)
+  const handleSubmit = async (e) => {
+    // console.log("product form:", product);
+    // console.log('post:', post)
+    // console.log('images:', product.images[0])
+    e.preventDefault()
+    try {
+      const form = new FormData();
+      for (let key in product) {
+        form.append(key, product[key]);
+        console.log('res:', key, product[key])
+      }
+      await axios.post(`${apiUrl}/product/createProduct`,
+        form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      })
+      navigate('/producto/listar')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-  const handleSubmit = (event) => {
-    // console.log("submitted");
-    // console.log(event);
+  const handleClick = (Transition) => () => {
+    setOpen(true);
+    setTransition(() => Transition);
+  }
+
+  function TransitionRight(props) {
+    return <Slide {...props} direction="right" />
+  }
+
+  const handleClose = () => {
+    setOpen(false)
   }
 
   const handleChange = (event) => {
@@ -89,14 +109,6 @@ const AddProduct = () => {
       [event.target.name]: event.target.value,
     })
   }
-
-  const {
-    nombre,
-    categoria,
-    imagen,
-    precio,
-    descripcion,
-  } = product
 
   const tittleName = () => {
     return (
@@ -109,14 +121,27 @@ const AddProduct = () => {
     )
   }
 
-  const imgManage = (imagen) => {
-    Object.entries(imagen).forEach(([key, value]) => {
-      console.log(key)
-      console.log(value)
-    })
+  const imgManage = () => {
+    // console.log('imagen: ', imagen)
+
+    // Object.entries(imagen).forEach(([key, value]) => {
+    //   console.log(key)
+    //   console.log(value)
+    // })
     // {
-    //   product.map((item, index) => (
-    //     console.log(item, index)
+    //   product.images.map((item, index) => (
+    //     console.log('item: ', item, 'index:', index)
+    //     // Object.entries(item).forEach(([key, value])
+
+    //     // item.map((val, inde) => {
+
+    //     //   console.log('val:', val)
+    //     //   console.log('item:', item)
+    //     //   console.log('val inde:', val[inde])
+    //     //   console.log('val index:', val[index])
+    //     // })
+    //     // console.log('item:', item[1])
+
     //   ))
     // }
     return (
@@ -129,10 +154,10 @@ const AddProduct = () => {
                   variant="subtitle2"
                   sx={{ fontWeight: '500' }}
                 >
-                  Imagenes
+                  Imagenes editar
                 </Typography>
                 <ImageList cols={6}>
-                  {product !== null &&
+                  {/* {product !== null &&
                     Object.entries(imagen).forEach(([key, value]) => {
                       <ImageListItem key={key} sx={{ px: 1 }}>
                         <img
@@ -143,7 +168,7 @@ const AddProduct = () => {
                         />
                       </ImageListItem>
                     })
-                  }
+                  } */}
                 </ImageList>
               </Grid>
             </div>
@@ -155,20 +180,24 @@ const AddProduct = () => {
                   variant="subtitle2"
                   sx={{ fontWeight: '500' }}
                 >
-                  Imagenes
+                  Imagenes consultar 2
                 </Typography>
                 <ImageList cols={6}>
-                  {product !== null &&
-                    Object.entries(imagen).forEach(([key, value]) => {
-                      <ImageListItem key={key} sx={{ px: 1 }}>
-                        <img
-                          alt={key}
-                          src={value}
-                          srcSet={`${value}`}
-                          loading="lazy"
-                        />
-                      </ImageListItem>
-                    })
+                  {
+                    product !== null &&
+                    product.images.map((item, index) => (
+                      (
+                        <ImageListItem key={index} sx={{ px: 1 }}>
+                          <img
+                            alt={index}
+                            src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
+                            srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                            loading="lazy"
+                          />
+                        </ImageListItem>
+
+                      )
+                    ))
                   }
                 </ImageList>
               </Grid>
@@ -189,23 +218,23 @@ const AddProduct = () => {
             >
               <input
                 type="file"
-                name="photos"
-                placeholder="Enter photos"
+                name="images"
+                placeholder="Enter images"
                 multiple={true}
                 onChange={handleFileChange}
-                id="filephotos"
+                id="fileimages"
               />
-              <label htmlFor="filephotos">Inserte imagenes</label>
+              <label htmlFor="fileimages">Inserte imagenes</label>
             </div>
             <div
               className={
-                photos.length > 0
+                images.length > 0
                   ? 'custom-file-preview files'
                   : 'custom-file-preview'
               }
             >
-              {photos.length > 0 &&
-                photos.map((item, index) => (
+              {images.length > 0 &&
+                images.map((item, index) => (
                   <div
                     className="prev-img"
                     key={index}
@@ -245,7 +274,7 @@ const AddProduct = () => {
   }
 
   const handleFiles = (files) => {
-    let photosArr = []
+    let imagesArr = []
     for (let file of files) {
       let reader = new FileReader()
       reader.readAsDataURL(file)
@@ -256,17 +285,18 @@ const AddProduct = () => {
           size: file.size,
           src: reader.result,
         }
-        photosArr.push(fileObj)
+        imagesArr.push(fileObj)
         setPost({
           ...post,
-          photos: [...photos, ...photosArr],
+          images: [...images, ...imagesArr],
         })
       })
     }
   }
   const handleFileChange = (e) => {
+    console.log('handle files')
     let files = e.target.files
-    console.log(files)
+    product.images = (files[0])
     handleFiles(files)
   }
 
@@ -276,9 +306,9 @@ const AddProduct = () => {
     console.log(target, targetindex)
     setPost({
       ...post,
-      photos: [
-        ...photos.slice(0, targetindex),
-        ...photos.slice(targetindex + 1),
+      images: [
+        ...images.slice(0, targetindex),
+        ...images.slice(targetindex + 1),
       ],
     })
   }
@@ -313,12 +343,12 @@ const AddProduct = () => {
                   onChange={handleChange}
                   type="text"
                   name="categoria"
-                  value={categoria || ''}
+                  value={product.categoria || ''}
                   validators={['required']}
                   errorMessages={['this field is required']}
                   disabled={isEditable === 'false'}
                 />
-                {imgManage(imagen)}
+                {imgManage()}
                 <br />
               </Grid>
               <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
@@ -327,7 +357,7 @@ const AddProduct = () => {
                   onChange={handleChange}
                   type="text"
                   name="precio"
-                  value={precio || ''}
+                  value={product.precio || ''}
                   validators={['required']}
                   errorMessages={['this field is required']}
                   disabled={isEditable === 'false'}
@@ -337,7 +367,7 @@ const AddProduct = () => {
                   onChange={handleChange}
                   type="text"
                   name="descripcion"
-                  value={descripcion || ''}
+                  value={product.descripcion || ''}
                   validators={['required']}
                   errorMessages={['this field is required']}
                   disabled={isEditable === 'false'}
@@ -347,7 +377,7 @@ const AddProduct = () => {
             {
               !isEditable || isEditable !== 'false'
                 ? (
-                  < Button color="primary" variant="contained" type="submit" >
+                  < Button onClick={handleClick(TransitionRight)} color="primary" variant="contained" type="submit" >
                     <Icon>add_box</Icon>
                     <Span sx={{ pl: 1, textTransform: 'capitalize' }}>
                       {
@@ -370,6 +400,24 @@ const AddProduct = () => {
             >
               Volver
             </Button>
+            <Snackbar
+              open={open}
+              onClose={handleClose}
+              TransitionComponent={Transition}
+              ContentProps={{
+                'aria-describedby': 'message-id',
+              }}
+              autoHideDuration={6000}
+            >
+              <Alert
+                onClose={handleClose}
+                styled={{ backgroundColor: green[600] }}
+                sx={{ width: '100%' }}
+                variant="filled"
+              >
+                Producto agregado exitosamente!
+              </Alert>
+            </Snackbar>
           </ValidatorForm>
         </div>
       </SimpleCard>

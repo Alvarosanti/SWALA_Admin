@@ -3,9 +3,7 @@ const { Schema, model } = require('mongoose')
 const ProductSchema = new Schema({
     producto_id: {
         type: String,
-        unique: true,
         trim: true,
-        required: true
     },
     nombre: {
         type: String,
@@ -23,11 +21,6 @@ const ProductSchema = new Schema({
     },
     contenido: {
         type: String,
-        required: true,
-    },
-    imagen: {
-        type: Object,
-        required: true,
     },
     categoria: {
         type: String,
@@ -43,6 +36,11 @@ const ProductSchema = new Schema({
     },
     estado: {
         type: String,
+    },
+    images: {
+        url: String,
+        public_id: String,
+        type: Array
     },
 }
     , {
