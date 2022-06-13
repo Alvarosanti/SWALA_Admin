@@ -51,6 +51,7 @@ const AddProduct = () => {
   const { images } = post
   const [open, setOpen] = useState(false);
   const [Transition, setTransition] = useState(undefined);
+  const [hasError, setError] = useState(true)
 
   useEffect(() => {
     if (idProduct !== null && isEditable !== null) {
@@ -65,18 +66,26 @@ const AddProduct = () => {
         )
     }
   }, [])
-  console.log('images det:', images)
+
   const handleSubmit = async (e) => {
     // console.log("product form:", product);
     // console.log('post:', post)
     // console.log('images:', product.images[0])
+    function generatorNumber(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
     e.preventDefault()
     try {
       const form = new FormData();
-      for (let key in product) {
-        form.append(key, product[key]);
-        console.log('res:', key, product[key])
-      }
+      // for (let key in product) {
+      //   form.append(key, product[key]);
+      // }
+      form.append('producto_id', generatorNumber(0, 1000))
+      form.append('nombre', product.nombre)
+      form.append('precio', product.precio)
+      form.append('descripcion', product.descripcion)
+      form.append('categoria', product.categoria)
+      form.append('images', product.images)
       await axios.post(`${apiUrl}/product/createProduct`,
         form, {
         headers: {
@@ -90,8 +99,10 @@ const AddProduct = () => {
   }
 
   const handleClick = (Transition) => () => {
-    setOpen(true);
-    setTransition(() => Transition);
+    if (hasError == false) {
+      setOpen(true);
+      setTransition(() => Transition);
+    }
   }
 
   function TransitionRight(props) {
@@ -108,6 +119,7 @@ const AddProduct = () => {
       ...product,
       [event.target.name]: event.target.value,
     })
+    setError(false)
   }
 
   const tittleName = () => {
@@ -157,18 +169,17 @@ const AddProduct = () => {
                   Imagenes editar
                 </Typography>
                 <ImageList cols={6}>
-                  {/* {product !== null &&
-                    Object.entries(imagen).forEach(([key, value]) => {
-                      <ImageListItem key={key} sx={{ px: 1 }}>
+                  {product !== null &&
+                    product.images.map((item, index) => (
+                      <ImageListItem key={index} sx={{ px: 1 }}>
                         <img
-                          alt={key}
-                          src={value}
-                          srcSet={`${value}`}
+                          alt={index}
+                          src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
+                          srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                           loading="lazy"
                         />
                       </ImageListItem>
-                    })
-                  } */}
+                    ))}
                 </ImageList>
               </Grid>
             </div>
@@ -294,7 +305,6 @@ const AddProduct = () => {
     }
   }
   const handleFileChange = (e) => {
-    console.log('handle files')
     let files = e.target.files
     product.images = (files[0])
     handleFiles(files)
@@ -325,7 +335,7 @@ const AddProduct = () => {
       </div>
       <SimpleCard title={tittleName()}>
         <div>
-          <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
+          <ValidatorForm onSubmit={handleSubmit} onError={() => null} >
             <Grid container spacing={6}>
               <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
                 <TextField

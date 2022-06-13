@@ -138,7 +138,7 @@ const ListProduct = () => {
                                         <TableRow>
                                             <TableCell>Nombre</TableCell>
                                             <TableCell>Codigo producto</TableCell>
-                                            <TableCell>Precio/u</TableCell>
+                                            <TableCell>Precio/u{' '}(S/.)</TableCell>
                                             <TableCell>Estado</TableCell>
                                             <TableCell>Acciones</TableCell>
                                         </TableRow>
@@ -163,7 +163,7 @@ const ListProduct = () => {
                                                         </div>
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                        {product.producto_id}
+                                                        {`0${product.producto_id}`}
                                                     </TableCell>
                                                     <TableCell align="left">
                                                         {product.precio}
