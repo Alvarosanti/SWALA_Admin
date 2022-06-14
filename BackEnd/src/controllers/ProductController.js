@@ -29,7 +29,7 @@ const createProduct = async (req, res) => {
         }
 
         const newProduct = new Product({
-            producto_id: "006",
+            producto_id,
             nombre,
             precio,
             descripcion,
@@ -69,24 +69,33 @@ const getOneProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        const { producto_id, nombre, precio, descripcion, contenido, imagen, categoria, check, sold, estado } = req.body;
+        const { estado } = req.body;
         const id = { _id: req.params.id };
-        await Product.findOneAndUpdate(id, {
-            producto_id,
-            nombre,
-            precio,
-            descripcion,
-            contenido,
-            imagen,
-            categoria,
-            check,
-            sold,
+        const upd = await Product.findOneAndUpdate(id, {
             estado,
         })
         res.send()
         res.json({ message: 'product updated' })
     } catch (error) {
+        // throw res.status(500)
         return res.status(500).json({ message: error.messag })
+    }
+}
+
+const updateProductState = async (req, res) => {
+    try {
+        const { estado } = req.body;
+        const id = { _id: req.params.id };
+        console.log("🚀 ~ file: ProductController.js ~ line 97 ~ updateProductState ~ estado:", req.body)
+        console.log("🚀 ~ file: ProductController.js ~ line 98 ~ updateProductState ~ id:", id)
+        await Product.findOneAndUpdate(id, {
+            estado,
+        })
+        res.send()
+    } catch (error) {
+        console.log("🚀 ~ file: ProductController.js ~ line 105 ~ updateProductState ~ error:", error)
+        throw error
+        // return res.sendStatus(500).json({ message: error.messag })
     }
 }
 
@@ -125,5 +134,6 @@ module.exports = {
     getOneProduct,
     updateProduct,
     deleteProduct,
-    deleteImages
+    deleteImages,
+    updateProductState,
 };

@@ -92,17 +92,48 @@ const ListProduct = () => {
 
     const handleChangeState = () => {
         // setIsLoading(true)
-        axios
-            .post(`${apiUrl}/productos/anular`, {
-                // id: productId,
-            })
-            .then(
-                (response) => {
-                    // setIsOpenModal(false)
-                    // loadTableData()
-                },
+        if (productState == 'habilitado') {
+            //deshabilitar api
+            axios
+                .put(`${apiUrl}/product/updateProductState/${productId}`, {
+                    estado: "deshabilitado",
+                })
+                .then(
+                    (response) => {
+                        setIsOpenModalChangeState(false)
+                        loadTableData()
+                    },
+                    (error) => {
+                        console.log("🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error", error)
+                        setIsOpenModalChangeState(false)
+                    }
+                )
+        } else {
+            //habilitar api
+            axios
+                .put(`${apiUrl}/product/updateProductState/${productId}`, {
+                    estado: "habilitado",
+                })
+                .then(
+                    (response) => {
+                        setIsOpenModalChangeState(false)
+                        loadTableData()
+                    },
+                    (error) => {
+                        console.log("🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error", error)
+                        setIsOpenModalChangeState(false)
+                    }
+                )
+        }
+    }
+
+    const loadTableData = () => {
+        axios.get(`${apiUrl}/product`)
+            .then((response) => {
+                setProduct(response.data.products)
+            },
                 (error) => {
-                    // setIsOpenModal(false)
+                    console.log(error)
                 }
             )
     }
