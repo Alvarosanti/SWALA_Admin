@@ -12,6 +12,8 @@ import {
     TablePagination,
     Avatar,
     Tooltip,
+    LinearProgress,
+    CircularProgress
 } from '@mui/material'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -60,6 +62,7 @@ const ListProduct = () => {
     const [productName, setNameProduct] = useState(null)
     const [productState, setProductState] = useState('')
     const [isOpenModalChangeState, setIsOpenModalChangeState] = useState(false)
+    const [isLoading, setLoading] = useState(false);
     const navigate = useNavigate()
 
     const handleChangePage = (event, newPage) => {
@@ -128,143 +131,169 @@ const ListProduct = () => {
     }
 
     const loadTableData = () => {
-        axios.get(`${apiUrl}/product`)
-            .then((response) => {
-                setProduct(response.data.products)
-            },
-                (error) => {
-                    console.log(error)
-                }
-            )
+        setTimeout(() => {
+            axios.get(`${apiUrl}/product`)
+                .then((response) => {
+                    setProduct(response.data.products)
+                },
+                    (error) => {
+                        console.log(error)
+                    }
+                )
+        }, 1000)
     }
 
     useEffect(() => {
-        axios.get(`${apiUrl}/product`)
-            .then((response) => {
-                setProduct(response.data.products)
-            },
-                (error) => {
-                    console.log(error)
-                }
-            )
+        setLoading(true)
+        setTimeout(() => {
+            axios.get(`${apiUrl}/product`)
+                .then((response) => {
+                    setProduct(response.data.products)
+                    setLoading(false)
+                },
+                    (error) => {
+                        console.log(error)
+                    }
+                )
+        }, 1000)
     }, [])
 
     return (
         <div>
             {
-                (products.length)
-                    ? <Container>
-                        <div className="breadcrumb">
-                            <Breadcrumb
-                                routeSegments={[
-                                    { name: 'Listado', path: '/producto/listar' },
-                                    { name: 'Productos' },
-                                ]}
-                            />
-                        </div>
-                        <SimpleCard title="Productos">
-                            <Box width="100%" overflow="auto">
-                                <StyledTable>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Nombre</TableCell>
-                                            <TableCell>Codigo producto</TableCell>
-                                            <TableCell>Precio/u{' '}(S/.)</TableCell>
-                                            <TableCell>Estado</TableCell>
-                                            <TableCell>Acciones</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {products
-                                            .slice(
-                                                page * rowsPerPage,
-                                                page * rowsPerPage + rowsPerPage
-                                            )
-                                            .map((product, index) => (
-                                                <TableRow key={product.producto_id}>
-                                                    <TableCell >
-                                                        <div style={{ position: 'relative', float: 'left', textAlign: 'right' }}>
-                                                            <Avatar
-                                                                src={product.images[0].url}
-                                                                sx={{ cursor: 'pointer' }}>
-                                                            </Avatar>
-                                                        </div>
-                                                        <div style={{ paddingTop: '10px', paddingLeft: '50px' }}>
-                                                            {product.nombre}
-                                                        </div>
-                                                    </TableCell>
-                                                    <TableCell align="left">
-                                                        {`0${product.producto_id}`}
-                                                    </TableCell>
-                                                    <TableCell align="left">
-                                                        {product.precio}
-                                                    </TableCell>
-                                                    <TableCell>{product.estado}</TableCell>
+                <Container>
+                    <div className="breadcrumb">
+                        <Breadcrumb
+                            routeSegments={[
+                                { name: 'Listado', path: '/producto/listar' },
+                                { name: 'Productos' },
+                            ]}
+                        />
+                    </div>
+                    {
+                        !isLoading
+                            ?
+                            <SimpleCard title="Productos">
+                                <Box width="100%" overflow="auto">
+                                    <StyledTable>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Nombre</TableCell>
+                                                <TableCell>Codigo producto</TableCell>
+                                                <TableCell>Precio/u{' '}(S/.)</TableCell>
+                                                <TableCell>Estado</TableCell>
+                                                <TableCell>Acciones</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {products.length !== 0
+                                                ?
+                                                products
+                                                    .slice(
+                                                        page * rowsPerPage,
+                                                        page * rowsPerPage + rowsPerPage
+                                                    )
+                                                    .map((product, index) => (
+                                                        <TableRow key={product.producto_id}>
+                                                            <TableCell >
+                                                                <div style={{ position: 'relative', float: 'left', textAlign: 'right' }}>
+                                                                    <Avatar
+                                                                        src={product.images[0].url}
+                                                                        sx={{ cursor: 'pointer' }}>
+                                                                    </Avatar>
+                                                                </div>
+                                                                <div style={{ paddingTop: '10px', paddingLeft: '50px' }}>
+                                                                    {product.nombre}
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell align="left">
+                                                                {`0${product.producto_id}`}
+                                                            </TableCell>
+                                                            <TableCell align="left">
+                                                                {product.precio}
+                                                            </TableCell>
+                                                            <TableCell>{product.estado}</TableCell>
+                                                            <TableCell>
+                                                                <Tooltip title="Visualizar">
+                                                                    <IconButton
+                                                                        onClick={() => handleProductDetail(product._id)}
+                                                                    >
+                                                                        <Icon color="primary">visibility</Icon>
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                                <Tooltip title="Editar">
+                                                                    <IconButton
+                                                                        onClick={() => handleProductEdit(product._id)}
+                                                                    >
+                                                                        <Icon color="primary">edit</Icon>
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                                {
+                                                                    product.estado === 'habilitado'
+                                                                        ? (
+                                                                            <>
+                                                                                <Tooltip title="Deshabilitar">
+                                                                                    <IconButton
+                                                                                        onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
+                                                                                    >
+                                                                                        <Icon color="error">do_not_disturb_alt</Icon>
+                                                                                    </IconButton>
+                                                                                </Tooltip>
+                                                                            </>
+                                                                        )
+                                                                        : (
+                                                                            <>
+                                                                                < Tooltip title="Habilitar">
+                                                                                    <IconButton
+                                                                                        onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
+                                                                                    >
+                                                                                        <Icon color="primary">check</Icon>
+                                                                                    </IconButton>
+                                                                                </Tooltip>
+                                                                            </>
+                                                                        )
+                                                                }
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))
+                                                :
+                                                <TableRow>
+                                                    <TableCell />
+                                                    <TableCell />
                                                     <TableCell>
-                                                        <Tooltip title="Visualizar">
-                                                            <IconButton
-                                                                onClick={() => handleProductDetail(product._id)}
-                                                            >
-                                                                <Icon color="primary">visibility</Icon>
-                                                            </IconButton>
-                                                        </Tooltip>
-                                                        <Tooltip title="Editar">
-                                                            <IconButton
-                                                                onClick={() => handleProductEdit(product._id)}
-                                                            >
-                                                                <Icon color="primary">edit</Icon>
-                                                            </IconButton>
-                                                        </Tooltip>
-                                                        {
-                                                            product.estado === 'habilitado'
-                                                                ? (
-                                                                    <>
-                                                                        <Tooltip title="Deshabilitar">
-                                                                            <IconButton
-                                                                                onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
-                                                                            >
-                                                                                <Icon color="error">do_not_disturb_alt</Icon>
-                                                                            </IconButton>
-                                                                        </Tooltip>
-                                                                    </>
-                                                                )
-                                                                : (
-                                                                    <>
-                                                                        < Tooltip title="Habilitar">
-                                                                            <IconButton
-                                                                                onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
-                                                                            >
-                                                                                <Icon color="primary">check</Icon>
-                                                                            </IconButton>
-                                                                        </Tooltip>
-                                                                    </>
-                                                                )
-                                                        }
+                                                        No data
+                                                        <br />
+                                                        &nbsp;&nbsp;&nbsp;<img src="https://img.icons8.com/windows/32/undefined/no-data-availible.png" />
                                                     </TableCell>
+                                                    <TableCell />
+                                                    <TableCell />
                                                 </TableRow>
-                                            ))}
-                                    </TableBody>
-                                </StyledTable>
-                                <TablePagination
-                                    sx={{ px: 2 }}
-                                    rowsPerPageOptions={[5, 10, 25]}
-                                    component="div"
-                                    count={products.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    backIconButtonProps={{
-                                        'aria-label': 'Previous Page',
-                                    }}
-                                    nextIconButtonProps={{
-                                        'aria-label': 'Next Page',
-                                    }}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
-                            </Box >
-                        </SimpleCard>
-                    </Container>
-                    : <div>No hay productos en el catalogo</div>
+                                            }
+                                        </TableBody>
+                                    </StyledTable>
+                                    <TablePagination
+                                        sx={{ px: 2 }}
+                                        rowsPerPageOptions={[5, 10, 25]}
+                                        component="div"
+                                        count={products.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        backIconButtonProps={{
+                                            'aria-label': 'Previous Page',
+                                        }}
+                                        nextIconButtonProps={{
+                                            'aria-label': 'Next Page',
+                                        }}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                    />
+                                </Box >
+                            </SimpleCard>
+                            :
+                            // <CircularProgress className="progress" color="secondary" />
+                            <LinearProgress color="secondary" />
+                    }
+                </Container>
             }
 
 
