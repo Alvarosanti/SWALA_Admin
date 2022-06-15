@@ -194,46 +194,6 @@ const ListProduct = () => {
         <div>
             {
                 <Container>
-                    <div>
-                        <TextField
-                            placeholder='Buscar...'
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            style={{ width: '350px' }}
-                            suffix={
-                                search ? (
-                                    <a
-                                        style={{ cursor: 'pointer', color: 'rgba(0, 0, 0, 0.25)', fontSize: 18 }}
-                                        onClick={() => setSearch('')}
-                                    >
-                                        <Icon color="primary">highlight_off</Icon>
-                                    </a>
-                                ) : (
-                                    <a
-                                        style={{ cursor: 'pointer', color: 'rgba(0, 0, 0, 0.25)', fontSize: 18 }}
-                                    >
-                                        <Icon color="primary">visibility</Icon>
-                                    </a>
-                                )
-                            }
-                        />
-                    </div>
-                    <br />
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={status}
-                            label="Estado"
-                            onChange={handleChangeStatus}
-                        >
-                            <MenuItem value={''}>Todos</MenuItem>
-                            <MenuItem value={'habilitado'}>Habilitado</MenuItem>
-                            <MenuItem value={'desactivado'}>Desactivado</MenuItem>
-                        </Select>
-                    </FormControl>
-
                     <div className="breadcrumb">
                         <Breadcrumb
                             routeSegments={[
@@ -246,8 +206,37 @@ const ListProduct = () => {
                         !isLoading
                             ?
                             <SimpleCard title="Productos">
+                                <div>
+                                    <FormControl sx={{ marginRight: 1, marginTop: 1 }}>
+                                        <TextField
+                                            placeholder='Buscar...'
+                                            value={search}
+                                            onChange={(e) => setSearch(e.target.value)}
+                                            style={{ width: '350px' }}
+                                            suffix={
+                                                search ? (
+                                                    <a onClick={() => setSearch('')} />
+                                                ) : ''
+                                            }
+                                        />
+                                    </FormControl>
+                                    <FormControl sx={{ m: 1, minWidth: 200 }}>
+                                        <InputLabel id="demo-simple-select-label">Estado</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={status}
+                                            label="Estado"
+                                            onChange={handleChangeStatus}
+                                        >
+                                            <MenuItem value={''}>Todos</MenuItem>
+                                            <MenuItem value={'habilitado'}>Habilitado</MenuItem>
+                                            <MenuItem value={'desactivado'}>Desactivado</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
                                 <Box width="100%" overflow="auto">
-                                    <StyledTable>
+                                    <StyledTable >
                                         <TableHead>
                                             <TableRow>
                                                 <TableCell>Nombre</TableCell>
@@ -368,7 +357,6 @@ const ListProduct = () => {
                 </Container>
             }
 
-
             {/* modal confirmation state */}
             <ConfirmationDialog
                 open={isOpenModalChangeState}
@@ -383,8 +371,6 @@ const ListProduct = () => {
                 productState={productState}
             />
         </div >
-
-
     )
 }
 
