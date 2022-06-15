@@ -106,7 +106,7 @@ const ListProduct = () => {
             //deshabilitar api
             axios
                 .put(`${apiUrl}/product/updateProductState/${productId}`, {
-                    estado: "deshabilitado",
+                    estado: "desactivado",
                 })
                 .then(
                     (response) => {
@@ -166,19 +166,29 @@ const ListProduct = () => {
     }, [])
 
     const handleChangeStatus = (event) => {
-        console.log("🚀 ~ file: ListProduct.jsx ~ line 165 ~ handleChangeStatus ~ event:", event.target.value)
         setStatus(event.target.value);
     }
 
     const dataSource =
-        search.trim().length === 0
-            ? products
-            : products.filter((c) => {
-                let field = c.nombre + ' ' + c.producto_id
-                field = field.toLowerCase()
-                const query = search.toLowerCase()
-                return field.indexOf(query) !== -1
-            })
+        (search)
+            ?
+            search.trim().length === 0
+                ? products
+                : products.filter((c) => {
+                    let field = c.nombre + ' ' + c.producto_id
+                    field = field.toLowerCase()
+                    const query = search.toLowerCase()
+                    return field.indexOf(query) !== -1
+                })
+            :
+            status.trim().length === 0
+                ? products
+                : products.filter((c) => {
+                    let field = c.estado
+                    field = field.toLowerCase()
+                    const query = status.toLowerCase()
+                    return field.indexOf(query) !== -1
+                })
 
     return (
         <div>
@@ -208,9 +218,8 @@ const ListProduct = () => {
                             }
                         />
                     </div>
+                    <br />
                     <FormControl fullWidth>
-
-
                         <InputLabel id="demo-simple-select-label">Estado</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
@@ -219,9 +228,9 @@ const ListProduct = () => {
                             label="Estado"
                             onChange={handleChangeStatus}
                         >
-                            <MenuItem selected={true} value={'todos'}>Todos</MenuItem>
+                            <MenuItem value={''}>Todos</MenuItem>
                             <MenuItem value={'habilitado'}>Habilitado</MenuItem>
-                            <MenuItem value={'deshabilitado'}>Deshabilitado</MenuItem>
+                            <MenuItem value={'desactivado'}>Desactivado</MenuItem>
                         </Select>
                     </FormControl>
 
