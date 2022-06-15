@@ -13,8 +13,12 @@ import {
     Avatar,
     Tooltip,
     LinearProgress,
-    CircularProgress
+    TextField,
 } from '@mui/material'
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
@@ -63,6 +67,9 @@ const ListProduct = () => {
     const [productState, setProductState] = useState('')
     const [isOpenModalChangeState, setIsOpenModalChangeState] = useState(false)
     const [isLoading, setLoading] = useState(false);
+    const [status, setStatus] = React.useState('');
+    const [search, setSearch] = useState('')
+
     const navigate = useNavigate()
 
     const handleChangePage = (event, newPage) => {
@@ -158,10 +165,66 @@ const ListProduct = () => {
         }, 1000)
     }, [])
 
+    const handleChangeStatus = (event) => {
+        console.log("🚀 ~ file: ListProduct.jsx ~ line 165 ~ handleChangeStatus ~ event:", event.target.value)
+        setStatus(event.target.value);
+    }
+
+    const dataSource =
+        search.trim().length === 0
+            ? products
+            : products.filter((c) => {
+                let field = c.nombre + ' ' + c.producto_id
+                field = field.toLowerCase()
+                const query = search.toLowerCase()
+                return field.indexOf(query) !== -1
+            })
+
     return (
         <div>
             {
                 <Container>
+                    <div>
+                        <TextField
+                            placeholder='Buscar...'
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            style={{ width: '350px' }}
+                            suffix={
+                                search ? (
+                                    <a
+                                        style={{ cursor: 'pointer', color: 'rgba(0, 0, 0, 0.25)', fontSize: 18 }}
+                                        onClick={() => setSearch('')}
+                                    >
+                                        <Icon color="primary">highlight_off</Icon>
+                                    </a>
+                                ) : (
+                                    <a
+                                        style={{ cursor: 'pointer', color: 'rgba(0, 0, 0, 0.25)', fontSize: 18 }}
+                                    >
+                                        <Icon color="primary">visibility</Icon>
+                                    </a>
+                                )
+                            }
+                        />
+                    </div>
+                    <FormControl fullWidth>
+
+
+                        <InputLabel id="demo-simple-select-label">Estado</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={status}
+                            label="Estado"
+                            onChange={handleChangeStatus}
+                        >
+                            <MenuItem selected={true} value={'todos'}>Todos</MenuItem>
+                            <MenuItem value={'habilitado'}>Habilitado</MenuItem>
+                            <MenuItem value={'deshabilitado'}>Deshabilitado</MenuItem>
+                        </Select>
+                    </FormControl>
+
                     <div className="breadcrumb">
                         <Breadcrumb
                             routeSegments={[
@@ -186,9 +249,9 @@ const ListProduct = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {products.length !== 0
+                                            {dataSource.length !== 0
                                                 ?
-                                                products
+                                                dataSource
                                                     .slice(
                                                         page * rowsPerPage,
                                                         page * rowsPerPage + rowsPerPage
@@ -275,7 +338,7 @@ const ListProduct = () => {
                                         sx={{ px: 2 }}
                                         rowsPerPageOptions={[5, 10, 25]}
                                         component="div"
-                                        count={products.length}
+                                        count={dataSource.length}
                                         rowsPerPage={rowsPerPage}
                                         page={page}
                                         backIconButtonProps={{

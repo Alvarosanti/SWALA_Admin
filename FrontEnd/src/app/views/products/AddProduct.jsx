@@ -8,6 +8,7 @@ import { useNavigate, useLocation } from 'react-router'
 import axios from 'axios'
 import './imageUpload.css'
 import { green } from '@mui/material/colors'
+import { create } from 'lodash'
 
 
 const TextField = styled(TextValidator)(() => ({
@@ -39,6 +40,7 @@ const AddProduct = () => {
     precio: '',
     descripcion: '',
   })
+  console.log("🚀 ~ file: AddProduct.jsx ~ line 43 ~ AddProduct ~ product", product)
   const { search } = useLocation()
   const searchParam = new URLSearchParams(search)
   const isEditable = searchParam.get('isEditable')
@@ -68,15 +70,20 @@ const AddProduct = () => {
   }, [])
 
   const handleSubmit = async (e) => {
-    // console.log("product form:", product);
-    // console.log('post:', post)
-    // console.log('images:', product.images[0])
+    e.preventDefault()
+    console.log("🚀 ~ file: AddProduct.jsx ~ line 74 ~ handleSubmit ~ isEditable:", isEditable)
+    isEditable == null
+      ? createProduct()
+      : updateProduct()
+  }
+
+  const createProduct = async () => {
     function generatorNumber(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-    e.preventDefault()
     try {
       const form = new FormData();
+      // another form
       // for (let key in product) {
       //   form.append(key, product[key]);
       // }
@@ -94,7 +101,26 @@ const AddProduct = () => {
       })
       navigate('/producto/listar')
     } catch (error) {
-      console.log(error)
+      console.log("🚀 ~ file: AddProduct.jsx ~ line 102 ~ createProduct ~ error", error)
+    }
+  }
+
+  const updateProduct = async () => {
+    try {
+      const form = new FormData();
+      form.append('nombre', product.nombre)
+      form.append('precio', product.precio)
+      form.append('descripcion', product.descripcion)
+      form.append('categoria', product.categoria)
+      await axios.put(`${apiUrl}/product/updateProduct/${idProduct}`,
+        form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      })
+      navigate('/producto/listar')
+    } catch (error) {
+      console.log("🚀 ~ file: AddProduct.jsx ~ line 127 ~ updateProduct ~ error", error)
     }
   }
 

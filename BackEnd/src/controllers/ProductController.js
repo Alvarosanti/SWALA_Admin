@@ -69,12 +69,14 @@ const getOneProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
     try {
-        const { estado } = req.body;
+        const { nombre, precio, descripcion, categoria } = req.body;
         const id = { _id: req.params.id };
-        const upd = await Product.findOneAndUpdate(id, {
-            estado,
+        await Product.findOneAndUpdate(id, {
+            nombre,
+            precio,
+            descripcion,
+            categoria,
         })
-        res.send()
         res.json({ message: 'product updated' })
     } catch (error) {
         // throw res.status(500)
@@ -86,8 +88,6 @@ const updateProductState = async (req, res) => {
     try {
         const { estado } = req.body;
         const id = { _id: req.params.id };
-        console.log("🚀 ~ file: ProductController.js ~ line 97 ~ updateProductState ~ estado:", req.body)
-        console.log("🚀 ~ file: ProductController.js ~ line 98 ~ updateProductState ~ id:", id)
         await Product.findOneAndUpdate(id, {
             estado,
         })
