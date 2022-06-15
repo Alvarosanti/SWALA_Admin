@@ -1,4 +1,5 @@
 const Product = require('../models/Product')
+const Category = require('../models/Category')
 const { uploadImage, deleteImage } = require('../libs/clouldinary')
 const fs = require('fs-extra')
 
@@ -127,6 +128,7 @@ const deleteImages = async (req, res) => {
         return res.status(500).json({ message: error.messag })
     }
 }
+
 
 module.exports = {
     getProducts,

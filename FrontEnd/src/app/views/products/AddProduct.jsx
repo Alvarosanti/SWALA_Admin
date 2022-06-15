@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { SimpleCard, Breadcrumb } from '../../../app/components'
 import { Span } from 'app/components/Typography'
 import { styled } from '@mui/system'
-import { Button, Icon, Grid, ImageList, ImageListItem, Typography, Slide, Snackbar, Alert } from '@mui/material'
+import { Button, Icon, Grid, ImageList, ImageListItem, Typography, Slide, Snackbar, Alert, MenuItem, Select } from '@mui/material'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
 import { useNavigate, useLocation } from 'react-router'
 import axios from 'axios'
 import './imageUpload.css'
 import { green } from '@mui/material/colors'
-import { create } from 'lodash'
-
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 
 const TextField = styled(TextValidator)(() => ({
   width: '100%',
@@ -54,6 +54,8 @@ const AddProduct = () => {
   const [open, setOpen] = useState(false);
   const [Transition, setTransition] = useState(undefined);
   const [hasError, setError] = useState(true)
+  const [category, setCategory] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState([])
 
   useEffect(() => {
     if (idProduct !== null && isEditable !== null) {
@@ -91,7 +93,7 @@ const AddProduct = () => {
       form.append('nombre', product.nombre)
       form.append('precio', product.precio)
       form.append('descripcion', product.descripcion)
-      form.append('categoria', product.categoria)
+      form.append('categoria', selectedCategory)
       form.append('images', product.images)
       await axios.post(`${apiUrl}/product/createProduct`,
         form, {
@@ -111,7 +113,7 @@ const AddProduct = () => {
       form.append('nombre', product.nombre)
       form.append('precio', product.precio)
       form.append('descripcion', product.descripcion)
-      form.append('categoria', product.categoria)
+      form.append('categoria', selectedCategory)
       await axios.put(`${apiUrl}/product/updateProduct/${idProduct}`,
         form, {
         headers: {
@@ -123,6 +125,16 @@ const AddProduct = () => {
       console.log("🚀 ~ file: AddProduct.jsx ~ line 127 ~ updateProduct ~ error", error)
     }
   }
+
+  //trae categoria
+  console.log("🚀 ~ file: AddProduct.jsx ~ line 56 ~ AddProduct ~ category", selectedCategory)
+
+  useEffect(() => {
+    axios.get(`${apiUrl}/category`)
+      .then((response) => {
+        setCategory(response.data.category)
+      })
+  }, [])
 
   const handleClick = (Transition) => () => {
     if (hasError == false) {
@@ -374,16 +386,42 @@ const AddProduct = () => {
                   errorMessages={['this field is required']}
                   disabled={isEditable === 'false'}
                 />
-                <TextField
-                  label="Categoria"
-                  onChange={handleChange}
-                  type="text"
-                  name="categoria"
-                  value={product.categoria || ''}
-                  validators={['required']}
-                  errorMessages={['this field is required']}
-                  disabled={isEditable === 'false'}
-                />
+                {isEditable === 'false'
+                  ?
+                  <TextField
+                    label="Categoria"
+                    onChange={handleChange}
+                    type="text"
+                    name="categoria"
+                    value={product.categoria || ''}
+                    validators={['required']}
+                    errorMessages={['this field is required']}
+                    disabled={isEditable === 'false'}
+                  />
+                  :
+                  <div>
+                    < FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Categoria</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={selectedCategory}
+                        label="Categoria"
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        defaultValue={product.categoria}
+                      >
+                        {
+                          category.map((categoria, index) => (
+                            <MenuItem key={index} value={categoria.nombre}>{categoria.nombre}</MenuItem>)
+                          )
+                        }
+                      </Select>
+                    </FormControl>
+                    <br />
+                    <br />
+                  </div>
+                }
+
                 {imgManage()}
                 <br />
               </Grid>

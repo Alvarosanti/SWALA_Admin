@@ -102,7 +102,7 @@ const ListProduct = () => {
 
     const handleChangeState = () => {
         // setIsLoading(true)
-        if (productState == 'habilitado') {
+        if (productState === 'habilitado') {
             //deshabilitar api
             axios
                 .put(`${apiUrl}/product/updateProductState/${productId}`, {
