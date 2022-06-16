@@ -73,7 +73,6 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log("🚀 ~ file: AddProduct.jsx ~ line 74 ~ handleSubmit ~ isEditable:", isEditable)
     isEditable == null
       ? createProduct()
       : updateProduct()
@@ -85,11 +84,11 @@ const AddProduct = () => {
     }
     try {
       const form = new FormData();
-      // another form
+      // aform
       // for (let key in product) {
       //   form.append(key, product[key]);
       // }
-      form.append('producto_id', generatorNumber(0, 1000))
+      form.append('producto_id', generatorNumber(0, 10000))
       form.append('nombre', product.nombre)
       form.append('precio', product.precio)
       form.append('descripcion', product.descripcion)
@@ -127,8 +126,6 @@ const AddProduct = () => {
   }
 
   //trae categoria
-  console.log("🚀 ~ file: AddProduct.jsx ~ line 56 ~ AddProduct ~ category", selectedCategory)
-
   useEffect(() => {
     axios.get(`${apiUrl}/category`)
       .then((response) => {
@@ -199,21 +196,22 @@ const AddProduct = () => {
         ? isEditable === 'true'
           ? (
             <div>
+              {/* editar */}
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Typography
                   variant="subtitle2"
                   sx={{ fontWeight: '500' }}
                 >
-                  Imagenes editar
+                  Imagenes
                 </Typography>
-                <ImageList cols={6}>
+                <ImageList>
                   {product !== null &&
                     product.images.map((item, index) => (
                       <ImageListItem key={index} sx={{ px: 1 }}>
                         <img
                           alt={index}
                           src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
-                          srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                          srcSet={`${item.url}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                           loading="lazy"
                         />
                       </ImageListItem>
@@ -224,14 +222,15 @@ const AddProduct = () => {
           )
           : (
             <div>
+              {/*  consulta */}
               <Grid item lg={12} md={12} sm={12} xs={12}>
                 <Typography
                   variant="subtitle2"
                   sx={{ fontWeight: '500' }}
                 >
-                  Imagenes consultar 2
+                  Imagenes
                 </Typography>
-                <ImageList cols={6}>
+                <ImageList>
                   {
                     product !== null &&
                     product.images.map((item, index) => (
@@ -240,7 +239,7 @@ const AddProduct = () => {
                           <img
                             alt={index}
                             src={`${item.url}?w=164&h=164&fit=crop&auto=format`}
-                            srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                            srcSet={`${item.url}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                             loading="lazy"
                           />
                         </ImageListItem>
@@ -318,8 +317,8 @@ const AddProduct = () => {
     let dt = e.dataTransfer
     let files = dt.files
     setHighlight(false)
+    product.images = (files[0])
     handleFiles(files)
-    console.log(files)
   }
 
   const handleFiles = (files) => {
@@ -376,6 +375,20 @@ const AddProduct = () => {
           <ValidatorForm onSubmit={handleSubmit} onError={() => null} >
             <Grid container spacing={6}>
               <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                {isEditable !== null
+                  ?
+                  < TextField
+                    label="Codigo producto"
+                    onChange={handleChange}
+                    type="text"
+                    name="codigo"
+                    value={product.producto_id || ''}
+                    validators={['required']}
+                    errorMessages={['this field is required']}
+                    disabled={true}
+                  />
+                  : ''
+                }
                 <TextField
                   label="Nombre producto"
                   onChange={handleChange}

@@ -238,12 +238,12 @@ const ListProduct = () => {
                                 <Box width="100%" overflow="auto">
                                     <StyledTable >
                                         <TableHead>
-                                            <TableRow>
-                                                <TableCell>Nombre</TableCell>
-                                                <TableCell>Codigo producto</TableCell>
-                                                <TableCell>Precio/u{' '}(S/.)</TableCell>
-                                                <TableCell>Estado</TableCell>
-                                                <TableCell>Acciones</TableCell>
+                                            <TableRow width={800}>
+                                                <TableCell width={300}>Nombre</TableCell>
+                                                <TableCell width={100}>Codigo producto</TableCell>
+                                                <TableCell width={100}>Precio/u{' '}(S/.)</TableCell>
+                                                <TableCell width={100}>Estado</TableCell>
+                                                <TableCell width={100}>Acciones</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -255,26 +255,26 @@ const ListProduct = () => {
                                                         page * rowsPerPage + rowsPerPage
                                                     )
                                                     .map((product, index) => (
-                                                        <TableRow key={product.producto_id}>
-                                                            <TableCell >
+                                                        <TableRow width={800}>
+                                                            <TableCell width={300}>
                                                                 <div style={{ position: 'relative', float: 'left', textAlign: 'right' }}>
                                                                     <Avatar
                                                                         src={product.images[0].url}
                                                                         sx={{ cursor: 'pointer' }}>
                                                                     </Avatar>
                                                                 </div>
-                                                                <div style={{ paddingTop: '10px', paddingLeft: '50px' }}>
+                                                                <div style={{ margin: '10px', paddingLeft: '50px' }}>
                                                                     {product.nombre}
                                                                 </div>
                                                             </TableCell>
-                                                            <TableCell align="left">
-                                                                {`0${product.producto_id}`}
+                                                            <TableCell align="left" width={100}>
+                                                                {product.producto_id}
                                                             </TableCell>
-                                                            <TableCell align="left">
+                                                            <TableCell align="left" width={100}>
                                                                 {product.precio}
                                                             </TableCell>
-                                                            <TableCell>{product.estado}</TableCell>
-                                                            <TableCell>
+                                                            <TableCell width={100}>{product.estado}</TableCell>
+                                                            <TableCell align="left" width={100}>
                                                                 <Tooltip title="Visualizar">
                                                                     <IconButton
                                                                         onClick={() => handleProductDetail(product._id)}
@@ -293,7 +293,7 @@ const ListProduct = () => {
                                                                     product.estado === 'habilitado'
                                                                         ? (
                                                                             <>
-                                                                                <Tooltip title="Deshabilitar">
+                                                                                <Tooltip title="Desactivar">
                                                                                     <IconButton
                                                                                         onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
                                                                                     >
@@ -362,10 +362,10 @@ const ListProduct = () => {
                 open={isOpenModalChangeState}
                 onConfirmDialogClose={handleCloseModal}
                 onYesClick={handleChangeState}
-                title={productState === 'habilitado' ? 'Deshabilitar producto' : 'Habilitar producto'}
+                title={productState === 'habilitado' ? 'Desactivar producto' : 'Habilitar producto'}
                 text={
                     <>
-                        {`¿Esta seguro que desea ${productState === 'habilitado' ? 'deshabilitar' : 'habilitar'} el producto`} {' '}<strong>{`${productName}`}</strong>{'?'}
+                        {`¿Esta seguro que desea ${productState === 'habilitado' ? 'desactivar' : 'habilitar'} el producto`} {' '}<strong>{`${productName}`}</strong>{'?'}
                     </>
                 }
                 productState={productState}

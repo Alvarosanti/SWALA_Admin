@@ -68,7 +68,7 @@ const ConfirmationDialog = ({
                         color="primary"
                         onClick={onYesClick}
                     >
-                        {productState === 'habilitado' ? 'Si, deshabilitar' : 'Si, habilitar'}
+                        {productState === 'habilitado' ? 'Si, desactivar' : 'Si, habilitar'}
                     </StyledButton>
                     <StyledButton
                         className="noBtn"
