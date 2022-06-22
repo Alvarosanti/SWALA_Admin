@@ -67,7 +67,7 @@ const ListProduct = () => {
     const [productState, setProductState] = useState('')
     const [isOpenModalChangeState, setIsOpenModalChangeState] = useState(false)
     const [isLoading, setLoading] = useState(false);
-    const [status, setStatus] = React.useState('');
+    const [status, setStatus] = React.useState('habilitado');
     const [search, setSearch] = useState('')
 
     const navigate = useNavigate()
