@@ -1,5 +1,4 @@
 const Product = require('../models/Product')
-const Category = require('../models/Category')
 const { uploadImage, deleteImage } = require('../libs/clouldinary')
 const fs = require('fs-extra')
 
