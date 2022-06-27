@@ -59,6 +59,7 @@ const StyledTable = styled(Table)(({ theme }) => ({
 const apiUrl = 'http://localhost:4000/api'
 
 const ListProduct = () => {
+    const noPic = 'https://res.cloudinary.com/dr9mltwij/image/upload/v1656357170/LADLOLA/noPic_dwnerv.jpg'
     const [rowsPerPage, setRowsPerPage] = React.useState(5)
     const [page, setPage] = React.useState(0)
     const [products, setProduct] = useState([])
@@ -163,6 +164,9 @@ const ListProduct = () => {
                     }
                 )
         }, 1000)
+
+
+
     }, [])
 
     const handleChangeStatus = (event) => {
@@ -202,162 +206,147 @@ const ListProduct = () => {
                             ]}
                         />
                     </div>
+
+
                     {
-                        !isLoading
-                            ?
-                            <SimpleCard title="Productos">
-                                <div>
-                                    <FormControl sx={{ marginRight: 1, marginTop: 1 }}>
-                                        <TextField
-                                            placeholder='Buscar...'
-                                            value={search}
-                                            onChange={(e) => setSearch(e.target.value)}
-                                            style={{ width: '350px' }}
-                                            suffix={
-                                                search ? (
-                                                    <a onClick={() => setSearch('')} />
-                                                ) : ''
-                                            }
-                                        />
-                                    </FormControl>
-                                    <FormControl sx={{ m: 1, minWidth: 200 }}>
-                                        <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={status}
-                                            label="Estado"
-                                            onChange={handleChangeStatus}
-                                        >
-                                            <MenuItem value={''}>Todos</MenuItem>
-                                            <MenuItem value={'habilitado'}>Habilitado</MenuItem>
-                                            <MenuItem value={'desactivado'}>Desactivado</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </div>
-                                <Box width="100%" overflow="auto">
-                                    <StyledTable >
-                                        <TableHead>
-                                            <TableRow width={800}>
-                                                <TableCell width={300}>Nombre</TableCell>
-                                                <TableCell width={100}>Codigo producto</TableCell>
-                                                <TableCell width={100}>Precio/u{' '}(S/.)</TableCell>
-                                                <TableCell width={100}>Estado</TableCell>
-                                                <TableCell width={100}>Acciones</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {dataSource.length !== 0
-                                                ?
-                                                dataSource
-                                                    .slice(
-                                                        page * rowsPerPage,
-                                                        page * rowsPerPage + rowsPerPage
-                                                    )
-                                                    .map((product, index) => (
-                                                        <TableRow width={800}>
-                                                            <TableCell width={300}>
-                                                                <div style={{ position: 'relative', float: 'left', textAlign: 'right' }}>
-                                                                    <Avatar
-                                                                        src={product.images[0].url}
-                                                                        sx={{ cursor: 'pointer' }}>
-                                                                    </Avatar>
-                                                                </div>
-                                                                <div style={{ margin: '10px', paddingLeft: '50px' }}>
-                                                                    {product.nombre}
-                                                                </div>
-                                                            </TableCell>
-                                                            <TableCell align="left" width={100}>
-                                                                {product.producto_id}
-                                                            </TableCell>
-                                                            <TableCell align="left" width={100}>
-                                                                {product.precio}
-                                                            </TableCell>
-                                                            <TableCell width={100}>{product.estado}</TableCell>
-                                                            <TableCell align="left" width={100}>
-                                                                <Tooltip title="Visualizar">
-                                                                    <IconButton
-                                                                        onClick={() => handleProductDetail(product._id)}
-                                                                    >
-                                                                        <Icon color="primary">visibility</Icon>
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                                <Tooltip title="Editar">
-                                                                    <IconButton
-                                                                        onClick={() => handleProductEdit(product._id)}
-                                                                    >
-                                                                        <Icon color="primary">edit</Icon>
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                                {
-                                                                    product.estado === 'habilitado'
-                                                                        ? (
-                                                                            <>
-                                                                                <Tooltip title="Desactivar">
-                                                                                    <IconButton
-                                                                                        onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
-                                                                                    >
-                                                                                        <Icon color="error">do_not_disturb_alt</Icon>
-                                                                                    </IconButton>
-                                                                                </Tooltip>
-                                                                            </>
-                                                                        )
-                                                                        : (
-                                                                            <>
-                                                                                < Tooltip title="Habilitar">
-                                                                                    <IconButton
-                                                                                        onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
-                                                                                    >
-                                                                                        <Icon color="primary">check</Icon>
-                                                                                    </IconButton>
-                                                                                </Tooltip>
-                                                                            </>
-                                                                        )
-                                                                }
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))
-                                                :
-                                                <TableRow>
-                                                    <TableCell />
-                                                    <TableCell />
-                                                    <TableCell>
-                                                        No data
-                                                        <br />
-                                                        &nbsp;&nbsp;&nbsp;<img src="https://img.icons8.com/windows/32/undefined/no-data-availible.png" />
-                                                    </TableCell>
-                                                    <TableCell />
-                                                    <TableCell />
-                                                </TableRow>
-                                            }
-                                        </TableBody>
-                                    </StyledTable>
-                                    <TablePagination
-                                        sx={{ px: 2 }}
-                                        rowsPerPageOptions={[5, 10, 25]}
-                                        component="div"
-                                        count={dataSource.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
-                                        backIconButtonProps={{
-                                            'aria-label': 'Previous Page',
-                                        }}
-                                        nextIconButtonProps={{
-                                            'aria-label': 'Next Page',
-                                        }}
-                                        onPageChange={handleChangePage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        <SimpleCard title="Productos">
+                            <div>
+                                <FormControl sx={{ marginRight: 1, marginTop: 1 }}>
+                                    <TextField
+                                        placeholder='Buscar...'
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        style={{ width: '350px' }}
+                                        suffix={
+                                            search ? (
+                                                <a onClick={() => setSearch('')} />
+                                            ) : ''
+                                        }
                                     />
-                                </Box >
-                            </SimpleCard>
-                            :
-                            // <CircularProgress className="progress" color="secondary" />
-                            <LinearProgress color="secondary" />
+                                </FormControl>
+                                <FormControl sx={{ m: 1, minWidth: 200 }}>
+                                    <InputLabel id="demo-simple-select-label">Estado</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={status}
+                                        label="Estado"
+                                        onChange={handleChangeStatus}
+                                    >
+                                        <MenuItem value={''}>Todos</MenuItem>
+                                        <MenuItem value={'habilitado'}>Habilitado</MenuItem>
+                                        <MenuItem value={'desactivado'}>Desactivado</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </div>
+                            <Box width="100%" overflow="auto">
+                                <StyledTable >
+                                    <TableHead>
+                                        <TableRow width={800}>
+                                            <TableCell width={300}>Nombre</TableCell>
+                                            <TableCell width={100}>Codigo producto</TableCell>
+                                            <TableCell width={100}>Precio/u{' '}(S/.)</TableCell>
+                                            <TableCell width={100}>Estado</TableCell>
+                                            <TableCell width={100}>Acciones</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            dataSource
+                                                .slice(
+                                                    page * rowsPerPage,
+                                                    page * rowsPerPage + rowsPerPage
+                                                )
+                                                .map((product, index) => (
+                                                    <TableRow width={800}>
+                                                        <TableCell width={300}>
+                                                            <div style={{ position: 'relative', float: 'left', textAlign: 'right' }}>
+                                                                <Avatar
+                                                                    src={product.images == '' ? noPic : product.images[0].url}
+                                                                    sx={{ cursor: 'pointer' }}>
+                                                                </Avatar>
+                                                            </div>
+                                                            <div style={{ margin: '10px', paddingLeft: '50px' }}>
+                                                                {product.nombre}
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell align="left" width={100}>
+                                                            {product.producto_id}
+                                                        </TableCell>
+                                                        <TableCell align="left" width={100}>
+                                                            {product.precio}
+                                                        </TableCell>
+                                                        <TableCell width={100}>{product.estado}</TableCell>
+                                                        <TableCell align="left" width={100}>
+                                                            <Tooltip title="Visualizar">
+                                                                <IconButton
+                                                                    onClick={() => handleProductDetail(product._id)}
+                                                                >
+                                                                    <Icon color="primary">visibility</Icon>
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            <Tooltip title="Editar">
+                                                                <IconButton
+                                                                    onClick={() => handleProductEdit(product._id)}
+                                                                >
+                                                                    <Icon color="primary">edit</Icon>
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            {
+                                                                product.estado === 'habilitado'
+                                                                    ? (
+                                                                        <>
+                                                                            <Tooltip title="Desactivar">
+                                                                                <IconButton
+                                                                                    onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
+                                                                                >
+                                                                                    <Icon color="error">do_not_disturb_alt</Icon>
+                                                                                </IconButton>
+                                                                            </Tooltip>
+                                                                        </>
+                                                                    )
+                                                                    : (
+                                                                        <>
+                                                                            < Tooltip title="Habilitar">
+                                                                                <IconButton
+                                                                                    onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
+                                                                                >
+                                                                                    <Icon color="primary">check</Icon>
+                                                                                </IconButton>
+                                                                            </Tooltip>
+                                                                        </>
+                                                                    )
+                                                            }
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))
+                                        }
+                                    </TableBody>
+                                </StyledTable>
+                                {isLoading && <div><br /><LinearProgress color="secondary" /> <br /></div>}
+                                <TablePagination
+                                    sx={{ px: 2 }}
+                                    rowsPerPageOptions={[5, 10, 25]}
+                                    component="div"
+                                    count={dataSource.length}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    backIconButtonProps={{
+                                        'aria-label': 'Previous Page',
+                                    }}
+                                    nextIconButtonProps={{
+                                        'aria-label': 'Next Page',
+                                    }}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                            </Box >
+                        </SimpleCard>
                     }
                 </Container>
             }
 
-            {/* modal confirmation state edit*/} 
+            {/* modal confirmation state edit*/}
             <ConfirmationDialog
                 open={isOpenModalChangeState}
                 onConfirmDialogClose={handleCloseModal}
