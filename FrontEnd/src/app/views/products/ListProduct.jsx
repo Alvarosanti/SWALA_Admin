@@ -156,6 +156,7 @@ const ListProduct = () => {
             axios.get(`${apiUrl}/product`)
                 .then((response) => {
                     setProduct(response.data.products)
+                    console.log(response.data.products)
                     setLoading(false)
                 },
                     (error) => {
@@ -189,6 +190,7 @@ const ListProduct = () => {
                     const query = status.toLowerCase()
                     return field.indexOf(query) !== -1
                 })
+                console.log(dataSource)
 
     return (
         <div>

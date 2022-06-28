@@ -82,6 +82,22 @@ export const navigations = [
             },
         ],
     },
+    {
+        name: 'Pagos',
+        icon: 'computer',
+        children: [
+            {
+                name: 'Agregar pagos',
+                iconText: 'AP',
+                path: '/pago/agregar',
+            },
+            {
+                name: 'Listar pagos',
+                iconText: 'LP',
+                path: '/pago/listar',
+            },
+        ],
+    },
     // {
     //     label: 'Components',
     //     type: 'label',
