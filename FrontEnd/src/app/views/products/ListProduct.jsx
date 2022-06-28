@@ -220,7 +220,7 @@ const ListProduct = () => {
                                             }
                                         />
                                     </FormControl>
-                                    <FormControl sx={{ m: 1, minWidth: 200 }}>
+                                        <FormControl sx={{ m: 1, minWidth: 200 }}>
                                         <InputLabel id="demo-simple-select-label">Estado</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"

@@ -82,6 +82,22 @@ export const navigations = [
             },
         ],
     },
+    {
+        name: 'Recurso',
+        icon: 'computer',
+        children: [
+            {
+                name: 'Agregar recursos',
+                iconText: 'AP',
+                path: '/recurso/agregar',
+            },
+            {
+                name: 'Listar recursos',
+                iconText: 'LP',
+                path: '/recurso/listar',
+            },
+        ],
+    },
     // {
     //     label: 'Components',
     //     type: 'label',
