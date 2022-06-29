@@ -5,7 +5,11 @@ import dashboardRoutes from './views/dashboard/DashboardRoutes'
 import materialRoutes from './views/material-kit/MaterialRoutes'
 import productsRoutes from './views/products/ProductsRoutes'
 import userRoutes from './views/users/UserRoutes'
+
+import recursoRoutes from './views/recurso/RecursoRoutes'
+
 import providersRoutes from './views/providers/ProviderRoutes'
+
 
 const redirectRoute = [
     {
@@ -29,7 +33,11 @@ const routes = [
     ...errorRoute,
     ...productsRoutes,
     ...userRoutes,
+
+    ...recursoRoutes,
+
     ...providersRoutes,
+
 ]
 
 export default routes

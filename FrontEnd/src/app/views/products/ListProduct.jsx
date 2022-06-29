@@ -206,6 +206,7 @@ const ListProduct = () => {
 
 
                     {
+
                         <SimpleCard title="Productos">
                             <div>
                                 <FormControl sx={{ marginRight: 1, marginTop: 1 }}>
@@ -219,6 +220,7 @@ const ListProduct = () => {
                                                 <a onClick={() => setSearch('')} />
                                             ) : ''
                                         }
+
                                     />
                                 </FormControl>
                                 <FormControl sx={{ m: 1, minWidth: 200 }}>
