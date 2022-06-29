@@ -164,9 +164,6 @@ const ListProduct = () => {
                     }
                 )
         }, 1000)
-
-
-
     }, [])
 
     const handleChangeStatus = (event) => {

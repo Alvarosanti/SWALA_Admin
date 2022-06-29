@@ -16,7 +16,7 @@ const ProviderSchema = new Schema({
         required: true
     },
     contacto: {
-        type: Number,
+        type: String,
         required: true
     },
     celular: {
@@ -25,6 +25,12 @@ const ProviderSchema = new Schema({
     estado: {
         type: String,
     },
+    descuento: {
+        type: Number,
+    },
+    productos: {
+        type: String,
+    }
 }
     , {
         timestamps: true,

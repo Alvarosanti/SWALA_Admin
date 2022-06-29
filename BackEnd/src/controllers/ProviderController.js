@@ -4,8 +4,8 @@ const fs = require('fs-extra')
 
 const getProviders = async (req, res) => {
     try {
-        const products = await Provider.find();
-        res.json({ products })
+        const providers = await Provider.find();
+        res.json({ providers })
     } catch (error) {
         return res.status(500).json({ message: error.messag })
     }
@@ -20,9 +20,10 @@ const createProvider = async (req, res) => {
             correo,
             contacto,
             celular,
+            estado: 'habilitado',
         });
         await newProvider.save();
-        res.json({ message: 'Provider saved', newProvid })
+        res.json({ message: 'Provider saved', newProvider })
     } catch (error) {
         console.log(error)
         return res.status(500).json({ message: error.messag })
@@ -31,15 +32,7 @@ const createProvider = async (req, res) => {
 
 const getOneProvider = async (req, res) => {
     try {
-        // const id = req.params.id
-        // await Product.findById(id, (err, product) => {
-        //     res.status(200).json({
-        //         status: 'success',
-        //         product
-        //     })
-        // });
-
-        const id = req.params.ruc
+        const id = req.params.id
         const provider = await Provider.findById(id)
         if (!provider) return res.sendStatus(404)
         return res.json({ provider })
@@ -52,7 +45,7 @@ const updateProvider = async (req, res) => {
     try {
         const { razon_social, ruc, correo, contacto, celular, } = req.body;
         const id = { _id: req.params.id };
-        await Product.findOneAndUpdate(id, {
+        await Provider.findOneAndUpdate(id, {
             razon_social,
             ruc,
             correo,
@@ -61,7 +54,6 @@ const updateProvider = async (req, res) => {
         })
         res.json({ message: 'provider updated' })
     } catch (error) {
-        // throw res.status(500)
         return res.status(500).json({ message: error.messag })
     }
 }
@@ -69,7 +61,7 @@ const updateProvider = async (req, res) => {
 const updateProviderState = async (req, res) => {
     try {
         const { estado } = req.body;
-        const id = { _id: req.params.ruc };
+        const id = { _id: req.params.id };
         await Provider.findOneAndUpdate(id, {
             estado,
         })
@@ -77,7 +69,6 @@ const updateProviderState = async (req, res) => {
     } catch (error) {
         console.log("🚀 ~ file: ProviderController.js ~ line 78 ~ updateProviderState ~ error", error)
         throw error
-        // return res.sendStatus(500).json({ message: error.messag })
     }
 }
 
@@ -91,7 +82,6 @@ const deleteProvider = async (req, res) => {
         return res.status(500).json({ message: error.messag })
     }
 }
-
 
 module.exports = {
     getProviders,
