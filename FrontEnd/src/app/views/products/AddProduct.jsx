@@ -40,7 +40,6 @@ const AddProduct = () => {
     precio: '',
     descripcion: '',
   })
-  console.log("🚀 ~ file: AddProduct.jsx ~ line 43 ~ AddProduct ~ product", product)
   const { search } = useLocation()
   const searchParam = new URLSearchParams(search)
   const isEditable = searchParam.get('isEditable')
