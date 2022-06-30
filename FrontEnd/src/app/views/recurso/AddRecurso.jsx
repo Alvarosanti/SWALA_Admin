@@ -38,6 +38,8 @@ const AddRecurso = () => {
     images: [],
     precio: '',
     descripcion: '',
+    stockMaximo: '',
+    stockMinimo: '',
   })
   const { search } = useLocation()
   const searchParam = new URLSearchParams(search)
@@ -90,9 +92,9 @@ const AddRecurso = () => {
       form.append('precio', recurso.precio)
       form.append('descripcion', recurso.descripcion)
       form.append('cantidad', recurso.cantidad)
-      form.append('stock', recurso.stock)
+      form.append('stockMaximo', recurso.stockMaximo)
+      form.append('stockMinimo', recurso.stockMinimo)
       form.append('medida', recurso.medida)
-      console.log(form);
       await axios.post(`${apiUrl}/recurso/createRecurso`,
         form, {
         headers: {
@@ -111,6 +113,8 @@ const AddRecurso = () => {
       form.append('precio', recurso.precio)
       form.append('descripcion', recurso.descripcion)
       form.append('categoria', selectedCategory)
+      form.append('stockMaximo', recurso.stockMaximo)
+      form.append('stockMinimo', recurso.stockMinimo)
       await axios.put(`${apiUrl}/recurso/updateRecurso/${idRecurso}`,
         form, {
         headers: {
@@ -268,11 +272,54 @@ const AddRecurso = () => {
                   disabled={isEditable === 'false'}
                 />
                 <TextField
-                  label="Precio"
+                  label="Precio x Unidad Medida"
                   onChange={handleChange}
                   type="text"
                   name="precio"
                   value={recurso.precio || ''}
+                  validators={['required']}
+                  errorMessages={['Este campo es requerido']}
+                  disabled={isEditable === 'false'}
+                />
+                <TextField
+                  label="Stock máximo"
+                  onChange={handleChange}
+                  type="text"
+                  name="stockMaximo"
+                  value={recurso.stockMaximo}
+                  validators={['required']}
+                  errorMessages={['Este campo es requerido']}
+                  disabled={isEditable === 'false'}
+                />
+                <TextField
+                  label="Stock mínimo"
+                  onChange={handleChange}
+                  type="text"
+                  name="stockMinimo"
+                  value={recurso.stockMinimo}
+                  validators={['required']}
+                  errorMessages={['Este campo es requerido']}
+                  disabled={isEditable === 'false'}
+                />
+                <br />
+              </Grid>
+              <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+                <TextField
+                  label="Cantidad x Unidad Medida"
+                  onChange={handleChange}
+                  type="text"
+                  name="cantidad"
+                  value={recurso.cantidad || ''}
+                  validators={['required']}
+                  errorMessages={['Este campo es requerido']}
+                  disabled={isEditable === 'false'}
+                />
+                <TextField
+                  label="Unidad de Medida"
+                  onChange={handleChange}
+                  type="text"
+                  name="medida"
+                  value={recurso.medida || ''}
                   validators={['required']}
                   errorMessages={['Este campo es requerido']}
                   disabled={isEditable === 'false'}
@@ -287,41 +334,6 @@ const AddRecurso = () => {
                   errorMessages={['Este campo es requerido']}
                   disabled={isEditable === 'false'}
                 />
-                       
-                <br />
-              </Grid>
-              <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
-              <TextField
-                  label="Cantidad"
-                  onChange={handleChange}
-                  type="text"
-                  name="cantidad"
-                  value={recurso.cantidad || ''}
-                  validators={['required']}
-                  errorMessages={['Este campo es requerido']}
-                  disabled={isEditable === 'false'}
-                />  
-                <TextField
-                  label="Unidad de Medida"
-                  onChange={handleChange}
-                  type="text"
-                  name="medida"
-                  value={recurso.medida || ''}
-                  validators={['required']}
-                  errorMessages={['Este campo es requerido']}
-                  disabled={isEditable === 'false'}
-                />  
-                <TextField
-                  label="Stock"
-                  onChange={handleChange}
-                  type="text"
-                  name="stock"
-                  value={recurso.stock || ''}
-                  validators={['required']}
-                  errorMessages={['Este campo es requerido']}
-                  disabled={isEditable === 'false'}
-                />
-                
               </Grid>
             </Grid>
             {

@@ -3,6 +3,7 @@ const router = Router();
 const recursoController = require('../controllers/RecursoController')
 
 router.route('/').get(recursoController.getRecurso)
+router.route('/getRecursoHabilitado').get(recursoController.getRecursoHabilitado)
 router.route('/createRecurso').post(recursoController.createRecurso)
 router.route('/:id').get(recursoController.getOneRecurso)
 router.route('/updateRecurso/:id').put(recursoController.updateRecurso)

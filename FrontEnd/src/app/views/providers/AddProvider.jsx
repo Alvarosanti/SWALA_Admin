@@ -13,6 +13,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Chip from '@mui/material/Chip';
+import Autocomplete from '@mui/material/Autocomplete';
 
 //rafce
 const TextField = styled(TextValidator)(() => ({
@@ -75,20 +76,22 @@ const AddProvider = () => {
   const [Transition, setTransition] = useState(undefined);
   const [hasError, setError] = useState(true)
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
+  const [resourceName, setResourceName] = React.useState([]);
+  const [recurso, setRecurso] = useState([])
 
   useEffect(() => {
     if (idProvider !== null && isEditable !== null) {
       axios.get(`${apiUrl}/provider/${idProvider}`)
         .then((response) => {
-          console.log(response.data.provider)
           setProvider(response.data.provider)
+
         },
           (error) => {
             console.log(error)
           }
         )
     }
+
   }, [])
 
   const handleSubmit = async (e) => {
@@ -98,24 +101,21 @@ const AddProvider = () => {
       : updateProvider()
   }
 
+  var arr = []
+  for (var i = 0; i < resourceName.length; i++) {
+    arr.push(resourceName[i].nombre);
+  }
+
   const createProvider = async () => {
-    function generatorNumber(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
     try {
       const form = new FormData();
-      // aform
-      // for (let key in product) {
-      //   form.append(key, product[key]);
-      // }
       form.append('razon_social', provider.razon_social)
       form.append('ruc', provider.ruc)
       form.append('correo', provider.correo)
       form.append('contacto', provider.contacto)
       form.append('celular', provider.celular)
       form.append('descuento', provider.descuento)
-      form.append('producto', provider.productos)
-
+      form.append('recurso', arr)
 
       await axios.post(`${apiUrl}/provider/createProvider`,
         form, {
@@ -137,6 +137,8 @@ const AddProvider = () => {
       form.append('correo', provider.correo)
       form.append('contacto', provider.contacto)
       form.append('celular', provider.celular)
+      form.append('descuento', provider.descuento)
+      form.append('recurso', resourceName)
       await axios.put(`${apiUrl}/provider/updateProvider/${idProvider}`,
         form, {
         headers: {
@@ -184,14 +186,22 @@ const AddProvider = () => {
     )
   }
 
-  const handleChange1 = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
+  const handleChangeResource = (value) => {
+    setResourceName(
       typeof value === 'string' ? value.split(',') : value,
     );
   };
+
+  useEffect(() => {
+    axios.get(`${apiUrl}/recurso/getRecursoHabilitado`)
+      .then((response) => {
+        setRecurso(response.data.recurso)
+      },
+        (error) => {
+          console.log(error)
+        }
+      )
+  }, [])
 
   return (
     <Container>
@@ -238,37 +248,38 @@ const AddProvider = () => {
                   errorMessages={['this field is required']}
                   disabled={isEditable === 'false'}
                 />
-                <div>
-                  <FormControl sx={{ m: 1, width: 300 }}>
-                    <InputLabel id="demo-multiple-chip-label">Productos</InputLabel>
-                    <Select
-                      labelId="demo-multiple-chip-label"
-                      id="demo-multiple-chip"
+                {
+                  isEditable === 'false'
+                    ?
+                    <TextField
+                      label="Recurso"
+                      onChange={handleChange}
+                      type="text"
+                      name="recurso"
+                      value={provider.recurso || ''}
+                      validators={['required']}
+                      errorMessages={['this field is required']}
+                      disabled={isEditable === 'false'}
+                    />
+                    :
+                    <Autocomplete
                       multiple
-                      value={''}
-                      onChange={handleChange1}
-                      input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                      renderValue={(selected) => (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                          {selected.map((value) => (
-                            <Chip key={value} label={value} />
-                          ))}
-                        </Box>
+                      id="tags-outlined"
+                      options={recurso}
+                      getOptionLabel={(option) => option.nombre}
+                      filterSelectedOptions
+                      value={resourceName}
+                      onChange={function (event, newValue) { return handleChangeResource(newValue) }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Recurso"
+                          placeholder="Buscar..."
+                        />
                       )}
-                      MenuProps={MenuProps}
-                    >
-                      {''.map((name) => (
-                        <MenuItem
-                          key={name}
-                          value={name}
-                          style={getStyles(name, personName, theme)}
-                        >
-                          {name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </div>
+                    />
+                }
+
               </Grid>
               <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
                 <TextField
@@ -296,13 +307,14 @@ const AddProvider = () => {
                   onChange={handleChange}
                   type="text"
                   name="descuento"
-                  value={provider.descuento || ''}
+                  value={provider.descuento}
                   validators={['required']}
                   errorMessages={['this field is required']}
                   disabled={isEditable === 'false'}
                 />
               </Grid>
             </Grid>
+            <br />
             {
               !isEditable || isEditable !== 'false'
                 ? (

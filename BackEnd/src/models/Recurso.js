@@ -26,17 +26,21 @@ const RecursoSchema = new Schema({
         type: String,
         required: true,
     },
-    stock: {
+    stockMaximo: {
+        type: Number,
+        default: false,
+    },
+    stockMinimo: {
         type: Number,
         default: false,
     },
     estado: {
         type: String,
     }
-}, 
-{
-    timestamps: true,
-    versionKey: false
-})
+},
+    {
+        timestamps: true,
+        versionKey: false
+    })
 
 module.exports = model('Recurso', RecursoSchema, 'Recurso')

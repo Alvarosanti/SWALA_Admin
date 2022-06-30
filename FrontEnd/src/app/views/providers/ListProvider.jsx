@@ -88,7 +88,7 @@ const ListProvider = () => {
     }
 
     const handleProviderEdit = (idProvider) => {
-        navigate(`/provedor/editar?codigo=${idProvider}&isEditable=true`)
+        navigate(`/proveedor/editar?codigo=${idProvider}&isEditable=true`)
     }
 
     const handleOpenModalChangeState = (idProvider, providerName, providerState) => {

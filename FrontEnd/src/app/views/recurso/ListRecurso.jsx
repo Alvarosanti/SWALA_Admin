@@ -170,192 +170,192 @@ const ListRecurso = () => {
 
     const dataSource =
         (search)
-        ?
-        search.trim().length === 0
-            ? recurso
-            : recurso.filter((c) => {
-                let field = c.nombre + ' ' + c.recurso_id
-                field = field.toLowerCase()
-                const query = search.toLowerCase()
-                return field.indexOf(query) !== -1
-            })
-        :
-        status.trim().length === 0
-            ? recurso
-            : recurso.filter((c) => {
-                let field = c.estado
-                field = field.toLowerCase()
-                const query = status.toLowerCase()
-                return field.indexOf(query) !== -1
-            })
-    
+            ?
+            search.trim().length === 0
+                ? recurso
+                : recurso.filter((c) => {
+                    let field = c.nombre + ' ' + c.recurso_id
+                    field = field.toLowerCase()
+                    const query = search.toLowerCase()
+                    return field.indexOf(query) !== -1
+                })
+            :
+            status.trim().length === 0
+                ? recurso
+                : recurso.filter((c) => {
+                    let field = c.estado
+                    field = field.toLowerCase()
+                    const query = status.toLowerCase()
+                    return field.indexOf(query) !== -1
+                })
+
     return (
         <div>
             {
                 <Container>
-                <div className="breadcrumb">
-                    <Breadcrumb
-                        routeSegments={[
-                            { name: 'Listado', path: '/recurso/listar' },
-                            { name: 'Recurso' },
-                        ]}
-                    />
-                </div>
-                {
-                    !isLoading
-                        ?
-                        <SimpleCard title="Recurso">
-                            <div>
-                                <FormControl sx={{ marginRight: 1, marginTop: 1 }}>
-                                    <TextField
-                                        placeholder='Buscar...'
-                                        value={search}
-                                        onChange={(e) => setSearch(e.target.value)}
-                                        style={{ width: '350px' }}
-                                        suffix={
-                                            search ? (
-                                                <a onClick={() => setSearch('')} />
-                                            ) : ''
-                                        }
-                                    />
-                                </FormControl>
-                                <FormControl sx={{ m: 1, minWidth: 200 }}>
-                                    <InputLabel id="demo-simple-select-label">Estado</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={status}
-                                        label="Estado"
-                                        onChange={handleChangeStatus}
-                                    >
-                                        <MenuItem value={''}>Todos</MenuItem>
-                                        <MenuItem value={'habilitado'}>Habilitado</MenuItem>
-                                        <MenuItem value={'desactivado'}>Desactivado</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </div>
-                            <Box width="100%" overflow="auto">
-                                <StyledTable >
-                                            <TableHead>
-                                                <TableRow width={900}>
-                                                    <TableCell width={200}>Nombre</TableCell>
-                                                    <TableCell width={100}>Codigo recurso</TableCell>
-                                                    <TableCell width={100}>Precio/u{' '}(S/.)</TableCell>
-                                                    <TableCell width={100}>Cantidad</TableCell>
-                                                    <TableCell width={100}>Unidad de Medida</TableCell>
-                                                    <TableCell width={100}>Estado</TableCell>
-                                                    <TableCell width={100}>Acciones</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {dataSource.length !== 0
-                                                    ?
-                                                    dataSource
-                                                        .slice(
-                                                            page * rowsPerPage,
-                                                            page * rowsPerPage + rowsPerPage
-                                                        )
-                                                        .map((recurso, index) => (
-                                                            <TableRow width={900}>
-                                                                <TableCell width={200}>
-                                                                    {recurso.nombre}
-                                                                </TableCell>
-                                                                <TableCell align="left" width={100}>
+                    <div className="breadcrumb">
+                        <Breadcrumb
+                            routeSegments={[
+                                { name: 'Listado', path: '/recurso/listar' },
+                                { name: 'Recurso' },
+                            ]}
+                        />
+                    </div>
+                    {
+                        !isLoading
+                            ?
+                            <SimpleCard title="Recurso">
+                                <div>
+                                    <FormControl sx={{ marginRight: 1, marginTop: 1 }}>
+                                        <TextField
+                                            placeholder='Buscar...'
+                                            value={search}
+                                            onChange={(e) => setSearch(e.target.value)}
+                                            style={{ width: '350px' }}
+                                            suffix={
+                                                search ? (
+                                                    <a onClick={() => setSearch('')} />
+                                                ) : ''
+                                            }
+                                        />
+                                    </FormControl>
+                                    <FormControl sx={{ m: 1, minWidth: 200 }}>
+                                        <InputLabel id="demo-simple-select-label">Estado</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={status}
+                                            label="Estado"
+                                            onChange={handleChangeStatus}
+                                        >
+                                            <MenuItem value={''}>Todos</MenuItem>
+                                            <MenuItem value={'habilitado'}>Habilitado</MenuItem>
+                                            <MenuItem value={'desactivado'}>Desactivado</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <Box width="100%" overflow="auto">
+                                    <StyledTable >
+                                        <TableHead>
+                                            <TableRow width={900}>
+                                                <TableCell width={200}>Nombre</TableCell>
+                                                <TableCell width={100}>Codigo recurso</TableCell>
+                                                <TableCell width={100}>Precio/u{' '}(S/.)</TableCell>
+                                                <TableCell width={100}>Cantidad</TableCell>
+                                                <TableCell width={100}>Unidad de Medida</TableCell>
+                                                <TableCell width={100}>Estado</TableCell>
+                                                <TableCell width={100}>Acciones</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {dataSource.length !== 0
+                                                ?
+                                                dataSource
+                                                    .slice(
+                                                        page * rowsPerPage,
+                                                        page * rowsPerPage + rowsPerPage
+                                                    )
+                                                    .map((recurso, index) => (
+                                                        <TableRow width={900}>
+                                                            <TableCell width={200}>
+                                                                {recurso.nombre}
+                                                            </TableCell>
+                                                            <TableCell align="left" width={100}>
                                                                 {recurso.recurso_id}
                                                             </TableCell>
-                                                                <TableCell align="left" width={100}>
-                                                                    {recurso.precio}
-                                                                </TableCell>
-                                                                <TableCell align="left" width={100}>
-                                                                    {recurso.cantidad}
-                                                                </TableCell>
-                                                                <TableCell align="left" width={100}>
-                                                                    {recurso.medida}
-                                                                </TableCell>
-                                                                <TableCell width={100}>{recurso.estado}</TableCell>
-                                                                <TableCell align="left" width={100}>
-                                                                    <Tooltip title="Visualizar">
-                                                                        <IconButton
-                                                                            onClick={() => handleRecursoDetail(recurso._id)}
-                                                                        >
-                                                                            <Icon color="primary">visibility</Icon>
-                                                                        </IconButton>
-                                                                    </Tooltip>
-                                                                    <Tooltip title="Editar">
-                                                                        <IconButton
-                                                                            onClick={() => handleRecursoEdit(recurso._id)}
-                                                                        >
-                                                                            <Icon color="primary">edit</Icon>
-                                                                        </IconButton>
-                                                                    </Tooltip>
-                                                                    {
-                                                                        recurso.estado === 'habilitado'
-                                                                            ? (
-                                                                                <>
-                                                                                    <Tooltip title="Desactivar">
-                                                                                        <IconButton
-                                                                                            onClick={() => { handleOpenModalChangeState(recurso._id, recurso.nombre, recurso.estado) }}
-                                                                                        >
-                                                                                            <Icon color="error">do_not_disturb_alt</Icon>
-                                                                                        </IconButton>
-                                                                                    </Tooltip>
-                                                                                </>
-                                                                            )
-                                                                            : (
-                                                                                <>
-                                                                                    <Tooltip title="Habilitar">
-                                                                                        <IconButton
-                                                                                            onClick={() => { handleOpenModalChangeState(recurso._id, recurso.nombre, recurso.estado) }}
-                                                                                        >
-                                                                                            <Icon color="primary">check</Icon>
-                                                                                        </IconButton>
-                                                                                    </Tooltip>
-                                                                                </>
-                                                                            )
-                                                                    }
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        ))
-                                                    :
-                                                    <TableRow>
-                                                        <TableCell />
-                                                        <TableCell />
-                                                        <TableCell>
-                                                            No data
-                                                            <br />
-                                                            &nbsp;&nbsp;&nbsp;<img src="https://img.icons8.com/windows/32/undefined/no-data-availible.png" />
-                                                        </TableCell>
-                                                        <TableCell />
-                                                        <TableCell />
-                                                    </TableRow>
-                                                }
-                                            </TableBody>
-                                </StyledTable>
-                                <TablePagination
-                                    sx={{ px: 2 }}
-                                    rowsPerPageOptions={[5, 10, 25]}
-                                    component="div"
-                                    count={dataSource.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    backIconButtonProps={{
-                                        'aria-label': 'Previous Page',
-                                    }}
-                                    nextIconButtonProps={{
-                                        'aria-label': 'Next Page',
-                                    }}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
-                            </Box >
-                        </SimpleCard>
-                        :
-                        // <CircularProgress className="progress" color="secondary" />
-                        <LinearProgress color="secondary" />
-                }
+                                                            <TableCell align="left" width={100}>
+                                                                {recurso.precio}
+                                                            </TableCell>
+                                                            <TableCell align="left" width={100}>
+                                                                {recurso.cantidad}
+                                                            </TableCell>
+                                                            <TableCell align="left" width={100}>
+                                                                {recurso.medida}
+                                                            </TableCell>
+                                                            <TableCell width={100}>{recurso.estado}</TableCell>
+                                                            <TableCell align="left" width={100}>
+                                                                <Tooltip title="Visualizar">
+                                                                    <IconButton
+                                                                        onClick={() => handleRecursoDetail(recurso._id)}
+                                                                    >
+                                                                        <Icon color="primary">visibility</Icon>
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                                <Tooltip title="Editar">
+                                                                    <IconButton
+                                                                        onClick={() => handleRecursoEdit(recurso._id)}
+                                                                    >
+                                                                        <Icon color="primary">edit</Icon>
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                                {
+                                                                    recurso.estado === 'habilitado'
+                                                                        ? (
+                                                                            <>
+                                                                                <Tooltip title="Desactivar">
+                                                                                    <IconButton
+                                                                                        onClick={() => { handleOpenModalChangeState(recurso._id, recurso.nombre, recurso.estado) }}
+                                                                                    >
+                                                                                        <Icon color="error">do_not_disturb_alt</Icon>
+                                                                                    </IconButton>
+                                                                                </Tooltip>
+                                                                            </>
+                                                                        )
+                                                                        : (
+                                                                            <>
+                                                                                <Tooltip title="Habilitar">
+                                                                                    <IconButton
+                                                                                        onClick={() => { handleOpenModalChangeState(recurso._id, recurso.nombre, recurso.estado) }}
+                                                                                    >
+                                                                                        <Icon color="primary">check</Icon>
+                                                                                    </IconButton>
+                                                                                </Tooltip>
+                                                                            </>
+                                                                        )
+                                                                }
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))
+                                                :
+                                                <TableRow>
+                                                    <TableCell />
+                                                    <TableCell />
+                                                    <TableCell>
+                                                        No data
+                                                        <br />
+                                                        &nbsp;&nbsp;&nbsp;<img src="https://img.icons8.com/windows/32/undefined/no-data-availible.png" />
+                                                    </TableCell>
+                                                    <TableCell />
+                                                    <TableCell />
+                                                </TableRow>
+                                            }
+                                        </TableBody>
+                                    </StyledTable>
+                                    <TablePagination
+                                        sx={{ px: 2 }}
+                                        rowsPerPageOptions={[5, 10, 25]}
+                                        component="div"
+                                        count={dataSource.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        backIconButtonProps={{
+                                            'aria-label': 'Previous Page',
+                                        }}
+                                        nextIconButtonProps={{
+                                            'aria-label': 'Next Page',
+                                        }}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                    />
+                                </Box >
+                            </SimpleCard>
+                            :
+                            // <CircularProgress className="progress" color="secondary" />
+                            <LinearProgress color="secondary" />
+                    }
                 </Container>
             }
-            {/* modal confirmation state edit*/} 
+            {/* modal confirmation state edit*/}
             <ConfirmationDialog
                 open={isOpenModalChangeState}
                 onConfirmDialogClose={handleCloseModal}
@@ -366,11 +366,11 @@ const ListRecurso = () => {
                         {`¿Esta seguro que desea ${recursoState === 'habilitado' ? 'desactivar' : 'habilitar'} el recurso`} {' '}<strong>{`${recursoName}`}</strong>{'?'}
                     </>
                 }
-                recursoState={recursoState}
+                productState={recursoState}
             />
-           
+
         </div>
-        
+
     )
 }
 

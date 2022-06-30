@@ -1,27 +1,27 @@
 const { Schema, model } = require('mongoose')
 
-const UserSchema = new Schema({
-    nombre: {
+const OCSchema = new Schema({
+    numeroOC: {
         type: String,
         required: true,
         trim: true
     },
-    email: {
+    proveedor_id: {
         type: String,
         required: true,
         trim: true,
         unique: true
     },
-    contraseña: {
+    estado: {
         type: String,
         required: true
     },
-    rol: {
+    total: {
         type: Number,
         default: 0
     },
-    cart: {
-        type: Array,
+    recursos: {
+        type: String,
         default: []
     },
     fechaEntrega: {
@@ -35,4 +35,4 @@ const UserSchema = new Schema({
 }
 )
 
-module.exports = model('User', UserSchema, 'User')
+module.exports = model('OCompra', OCSchema, 'OCompra')

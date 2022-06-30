@@ -10,12 +10,18 @@ const getRecurso = async (req, res) => {
     }
 }
 
+const getRecursoHabilitado = async (req, res) => {
+    try {
+        const recurso = await Recurso.find({ estado: 'habilitado' });
+        res.json({ recurso })
+    } catch (error) {
+        return res.status(500).json({ message: error.messag })
+    }
+}
+
 const createRecurso = async (req, res) => {
     try {
-        const { recurso_id, nombre, precio, descripcion, cantidad, medida, stock} = req.body;
-        console.log('req body:', req.body)
-        console.log('req file:', req.files)   
-
+        const { recurso_id, nombre, precio, descripcion, cantidad, medida, stockMaximo, stockMinimo } = req.body;
         const newRecurso = new Recurso({
             recurso_id,
             nombre,
@@ -23,7 +29,8 @@ const createRecurso = async (req, res) => {
             descripcion,
             cantidad,
             medida,
-            stock,
+            stockMaximo,
+            stockMinimo,
             estado: "habilitado",
         });
         await newRecurso.save();
@@ -55,7 +62,7 @@ const getOneRecurso = async (req, res) => {
 
 const updateRecurso = async (req, res) => {
     try {
-        const { nombre, precio, descripcion, cantidad, medida, stock} = req.body;
+        const { nombre, precio, descripcion, cantidad, medida, stockMaximo, stockMinimo } = req.body;
         const id = { _id: req.params.id };
         await Recurso.findOneAndUpdate(id, {
             nombre,
@@ -63,7 +70,8 @@ const updateRecurso = async (req, res) => {
             descripcion,
             cantidad,
             medida,
-            stock
+            stockMaximo,
+            stockMinimo
         })
         res.json({ message: 'recurso updated' })
     } catch (error) {
@@ -103,6 +111,7 @@ const deleteRecurso = async (req, res) => {
 
 module.exports = {
     getRecurso,
+    getRecursoHabilitado,
     createRecurso,
     getOneRecurso,
     updateRecurso,

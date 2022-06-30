@@ -13,7 +13,7 @@ const getProviders = async (req, res) => {
 
 const createProvider = async (req, res) => {
     try {
-        const { razon_social, ruc, correo, contacto, celular, } = req.body;
+        const { razon_social, ruc, correo, contacto, celular, descuento, recurso } = req.body;
         const newProvider = new Provider({
             razon_social,
             ruc,
@@ -21,6 +21,8 @@ const createProvider = async (req, res) => {
             contacto,
             celular,
             estado: 'habilitado',
+            descuento,
+            recurso,
         });
         await newProvider.save();
         res.json({ message: 'Provider saved', newProvider })
@@ -43,7 +45,7 @@ const getOneProvider = async (req, res) => {
 
 const updateProvider = async (req, res) => {
     try {
-        const { razon_social, ruc, correo, contacto, celular, } = req.body;
+        const { razon_social, ruc, correo, contacto, celular, descuento, recurso } = req.body;
         const id = { _id: req.params.id };
         await Provider.findOneAndUpdate(id, {
             razon_social,
@@ -51,6 +53,8 @@ const updateProvider = async (req, res) => {
             correo,
             contacto,
             celular,
+            descuento,
+            recurso,
         })
         res.json({ message: 'provider updated' })
     } catch (error) {
