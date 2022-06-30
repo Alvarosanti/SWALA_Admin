@@ -33,7 +33,6 @@ const Container = styled('div')(({ theme }) => ({
         [theme.breakpoints.down('sm')]: {
             marginBottom: '16px',
         },
-        // hola mundo
     },
 }))
 
@@ -59,14 +58,15 @@ const StyledTable = styled(Table)(({ theme }) => ({
 
 const apiUrl = 'http://localhost:4000/api'
 
-const ListProduct = () => {
-    const noPic = 'https://res.cloudinary.com/dr9mltwij/image/upload/v1656357170/LADLOLA/noPic_dwnerv.jpg'
+//rafce
+
+const ListProvider = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(5)
     const [page, setPage] = React.useState(0)
-    const [products, setProduct] = useState([])
-    const [productId, setIdProduct] = useState(null)
-    const [productName, setNameProduct] = useState(null)
-    const [productState, setProductState] = useState('')
+    const [provider, setProvider] = useState([])
+    const [providerId, setIdProvider] = useState(null)
+    const [providerName, setNameProvider] = useState(null)
+    const [productState, setProviderState] = useState('')
     const [isOpenModalChangeState, setIsOpenModalChangeState] = useState(false)
     const [isLoading, setLoading] = useState(false);
     const [status, setStatus] = React.useState('habilitado');
@@ -83,19 +83,19 @@ const ListProduct = () => {
         setPage(0)
     }
 
-    const handleProductDetail = (idProduct) => {
-        navigate(`/producto/editar?codigo=${idProduct}&isEditable=false`)
+    const handleProviderDetail = (idProvider) => {
+        navigate(`/proveedor/editar?codigo=${idProvider}&isEditable=false`)
     }
 
-    const handleProductEdit = (idProduct) => {
-        navigate(`/producto/editar?codigo=${idProduct}&isEditable=true`)
+    const handleProviderEdit = (idProvider) => {
+        navigate(`/provedor/editar?codigo=${idProvider}&isEditable=true`)
     }
 
-    const handleOpenModalChangeState = (idProduct, productName, productState) => {
+    const handleOpenModalChangeState = (idProvider, providerName, providerState) => {
         setIsOpenModalChangeState(true)
-        setIdProduct(idProduct)
-        setNameProduct(productName)
-        setProductState(productState)
+        setIdProvider(idProvider)
+        setNameProvider(providerName)
+        setProviderState(providerState)
     }
 
     const handleCloseModal = () => {
@@ -107,7 +107,7 @@ const ListProduct = () => {
         if (productState === 'habilitado') {
             //deshabilitar api
             axios
-                .put(`${apiUrl}/product/updateProductState/${productId}`, {
+                .put(`${apiUrl}/provider/updateProviderState/${providerId}`, {
                     estado: "desactivado",
                 })
                 .then(
@@ -123,7 +123,7 @@ const ListProduct = () => {
         } else {
             //habilitar api
             axios
-                .put(`${apiUrl}/product/updateProductState/${productId}`, {
+                .put(`${apiUrl}/provider/updateProviderState/${providerId}`, {
                     estado: "habilitado",
                 })
                 .then(
@@ -141,9 +141,9 @@ const ListProduct = () => {
 
     const loadTableData = () => {
         setTimeout(() => {
-            axios.get(`${apiUrl}/product`)
+            axios.get(`${apiUrl}/provider`)
                 .then((response) => {
-                    setProduct(response.data.products)
+                    setProvider(response.data.providers)
                 },
                     (error) => {
                         console.log(error)
@@ -155,9 +155,9 @@ const ListProduct = () => {
     useEffect(() => {
         setLoading(true)
         setTimeout(() => {
-            axios.get(`${apiUrl}/product`)
+            axios.get(`${apiUrl}/provider`)
                 .then((response) => {
-                    setProduct(response.data.products)
+                    setProvider(response.data.providers)
                     setLoading(false)
                 },
                     (error) => {
@@ -175,17 +175,17 @@ const ListProduct = () => {
         (search)
             ?
             search.trim().length === 0
-                ? products
-                : products.filter((c) => {
-                    let field = c.nombre + ' ' + c.producto_id
+                ? provider
+                : provider.filter((c) => {
+                    let field = c.razon_social + ' ' + c.ruc
                     field = field.toLowerCase()
                     const query = search.toLowerCase()
                     return field.indexOf(query) !== -1
                 })
             :
             status.trim().length === 0
-                ? products
-                : products.filter((c) => {
+                ? provider
+                : provider.filter((c) => {
                     let field = c.estado
                     field = field.toLowerCase()
                     const query = status.toLowerCase()
@@ -199,16 +199,15 @@ const ListProduct = () => {
                     <div className="breadcrumb">
                         <Breadcrumb
                             routeSegments={[
-                                { name: 'Listado', path: '/producto/listar' },
-                                { name: 'Productos' },
+                                { name: 'Listado', path: '/proveedor/listar' },
+                                { name: 'Proveedores' },
                             ]}
                         />
                     </div>
 
 
                     {
-
-                        <SimpleCard title="Productos">
+                        <SimpleCard title="Proveedores">
                             <div>
                                 <FormControl sx={{ marginRight: 1, marginTop: 1 }}>
                                     <TextField
@@ -221,7 +220,6 @@ const ListProduct = () => {
                                                 <a onClick={() => setSearch('')} />
                                             ) : ''
                                         }
-
                                     />
                                 </FormControl>
                                 <FormControl sx={{ m: 1, minWidth: 200 }}>
@@ -243,9 +241,9 @@ const ListProduct = () => {
                                 <StyledTable >
                                     <TableHead>
                                         <TableRow width={800}>
-                                            <TableCell width={300}>Nombre</TableCell>
-                                            <TableCell width={100}>Codigo producto</TableCell>
-                                            <TableCell width={100}>Precio/u{' '}(S/.)</TableCell>
+                                            <TableCell width={300}>Razon social</TableCell>
+                                            <TableCell width={100}>RUC</TableCell>
+                                            <TableCell width={100}>Contacto</TableCell>
                                             <TableCell width={100}>Estado</TableCell>
                                             <TableCell width={100}>Acciones</TableCell>
                                         </TableRow>
@@ -257,48 +255,40 @@ const ListProduct = () => {
                                                     page * rowsPerPage,
                                                     page * rowsPerPage + rowsPerPage
                                                 )
-                                                .map((product, index) => (
+                                                .map((provider, index) => (
                                                     <TableRow width={800}>
                                                         <TableCell width={300}>
-                                                            <div style={{ position: 'relative', float: 'left', textAlign: 'right' }}>
-                                                                <Avatar
-                                                                    src={product.images == '' ? noPic : product.images[0].url}
-                                                                    sx={{ cursor: 'pointer' }}>
-                                                                </Avatar>
-                                                            </div>
-                                                            <div style={{ margin: '10px', paddingLeft: '50px' }}>
-                                                                {product.nombre}
-                                                            </div>
+                                                            {provider.razon_social}
                                                         </TableCell>
                                                         <TableCell align="left" width={100}>
-                                                            {product.producto_id}
+                                                            {provider.ruc}
                                                         </TableCell>
                                                         <TableCell align="left" width={100}>
-                                                            {product.precio}
+                                                            {provider.contacto}
                                                         </TableCell>
-                                                        <TableCell width={100}>{product.estado}</TableCell>
+                                                        <TableCell width={100}>{provider.estado}</TableCell>
                                                         <TableCell align="left" width={100}>
                                                             <Tooltip title="Visualizar">
                                                                 <IconButton
-                                                                    onClick={() => handleProductDetail(product._id)}
+                                                                    onClick={() => handleProviderDetail(provider._id)}
                                                                 >
                                                                     <Icon color="primary">visibility</Icon>
                                                                 </IconButton>
                                                             </Tooltip>
                                                             <Tooltip title="Editar">
                                                                 <IconButton
-                                                                    onClick={() => handleProductEdit(product._id)}
+                                                                    onClick={() => handleProviderEdit(provider._id)}
                                                                 >
                                                                     <Icon color="primary">edit</Icon>
                                                                 </IconButton>
                                                             </Tooltip>
                                                             {
-                                                                product.estado === 'habilitado'
+                                                                provider.estado === 'habilitado'
                                                                     ? (
                                                                         <>
                                                                             <Tooltip title="Desactivar">
                                                                                 <IconButton
-                                                                                    onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
+                                                                                    onClick={() => { handleOpenModalChangeState(provider._id, provider.razon_social, provider.estado) }}
                                                                                 >
                                                                                     <Icon color="error">do_not_disturb_alt</Icon>
                                                                                 </IconButton>
@@ -309,7 +299,7 @@ const ListProduct = () => {
                                                                         <>
                                                                             < Tooltip title="Habilitar">
                                                                                 <IconButton
-                                                                                    onClick={() => { handleOpenModalChangeState(product._id, product.nombre, product.estado) }}
+                                                                                    onClick={() => { handleOpenModalChangeState(provider._id, provider.razon_social, provider.estado) }}
                                                                                 >
                                                                                     <Icon color="primary">check</Icon>
                                                                                 </IconButton>
@@ -351,10 +341,10 @@ const ListProduct = () => {
                 open={isOpenModalChangeState}
                 onConfirmDialogClose={handleCloseModal}
                 onYesClick={handleChangeState}
-                title={productState === 'habilitado' ? 'Desactivar producto' : 'Habilitar producto'}
+                title={productState === 'habilitado' ? 'Desactivar proveedor' : 'Habilitar proveedor'}
                 text={
                     <>
-                        {`¿Esta seguro que desea ${productState === 'habilitado' ? 'desactivar' : 'habilitar'} el producto`} {' '}<strong>{`${productName}`}</strong>{'?'}
+                        {`¿Esta seguro que desea ${productState === 'habilitado' ? 'desactivar' : 'habilitar'} al proveedor`} {' '}<strong>{`${providerName}`}</strong>{'?'}
                     </>
                 }
                 productState={productState}
@@ -363,4 +353,4 @@ const ListProduct = () => {
     )
 }
 
-export default ListProduct;
+export default ListProvider
