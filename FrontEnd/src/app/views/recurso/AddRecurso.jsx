@@ -232,9 +232,7 @@ const AddRecurso = () => {
       ],
     })
   }
-  console.log('stock', recurso.stock)
-  console.log('stock minimo:', recurso.stockMinimo)
-  console.log('s <= sm:', newStock <= recurso.stockMinimo)
+
   const checkStock = () => {
     if (recurso.stock && newStock <= recurso.stockMinimo) {
       axios
@@ -243,7 +241,6 @@ const AddRecurso = () => {
         })
         .then(
           (response) => {
-            console.log('true')
           },
           (error) => {
             console.log("🚀 ~ file: AddRecurso.jsx ~ line 249 ~ useEffect ~ error", error)
@@ -256,7 +253,6 @@ const AddRecurso = () => {
         })
         .then(
           (response) => {
-            console.log('false')
           },
           (error) => {
             console.log("🚀 ~ file: AddRecurso.jsx ~ line 249 ~ useEffect ~ error", error)
