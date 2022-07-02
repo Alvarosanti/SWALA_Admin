@@ -1,5 +1,4 @@
 const Recurso = require('../models/Recurso')
-const fs = require('fs-extra')
 
 const getRecurso = async (req, res) => {
     try {
@@ -19,19 +18,42 @@ const getRecursoHabilitado = async (req, res) => {
     }
 }
 
+const getRecursoAlerta = async (req, res) => {
+    try {
+        const recurso = await Recurso.find({ alerta: true });
+        res.json({ recurso })
+    } catch (error) {
+        return res.status(500).json({ message: error.messag })
+    }
+}
+
+const updateRecursoAlert = async (req, res) => {
+    try {
+        const { alerta } = req.body;
+        const id = { _id: req.params.id };
+        await Recurso.findOneAndUpdate(id, {
+            alerta,
+        })
+        res.send()
+    } catch (error) {
+        console.log("🚀 ~ file: RecursoController.js ~ line 25 ~ createRecursoAlert ~ error", error)
+        throw error
+    }
+}
+
 const createRecurso = async (req, res) => {
     try {
-        const { recurso_id, nombre, precio, descripcion, cantidad, medida, stockMaximo, stockMinimo } = req.body;
+        const { recurso_id, nombre, medida, stock, precio, stockMinimo, descripcion } = req.body;
         const newRecurso = new Recurso({
             recurso_id,
             nombre,
-            precio,
-            descripcion,
-            cantidad,
             medida,
-            stockMaximo,
+            stock,
+            precio,
             stockMinimo,
+            descripcion,
             estado: "habilitado",
+            alerta: false
         });
         await newRecurso.save();
         res.json({ message: 'Recurso saved', newRecurso })
@@ -62,16 +84,15 @@ const getOneRecurso = async (req, res) => {
 
 const updateRecurso = async (req, res) => {
     try {
-        const { nombre, precio, descripcion, cantidad, medida, stockMaximo, stockMinimo } = req.body;
+        const { nombre, medida, stock, precio, stockMinimo, descripcion } = req.body;
         const id = { _id: req.params.id };
         await Recurso.findOneAndUpdate(id, {
             nombre,
-            precio,
-            descripcion,
-            cantidad,
             medida,
-            stockMaximo,
-            stockMinimo
+            stock,
+            precio,
+            stockMinimo,
+            descripcion,
         })
         res.json({ message: 'recurso updated' })
     } catch (error) {
@@ -117,4 +138,6 @@ module.exports = {
     updateRecurso,
     updateRecursoState,
     deleteRecurso,
+    updateRecursoAlert,
+    getRecursoAlerta,
 };

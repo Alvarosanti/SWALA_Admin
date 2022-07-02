@@ -267,7 +267,7 @@ const ListRecurso = () => {
                                                                 {recurso.precio}
                                                             </TableCell>
                                                             <TableCell align="left" width={100}>
-                                                                {recurso.cantidad}
+                                                                {recurso.stock}
                                                             </TableCell>
                                                             <TableCell align="left" width={100}>
                                                                 {recurso.medida}

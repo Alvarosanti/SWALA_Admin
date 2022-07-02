@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { Paragraph } from 'app/components/Typography'
 import { Box, styled, useTheme } from '@mui/system'
 import {
@@ -14,6 +15,7 @@ import {
     MenuItem,
     Select,
 } from '@mui/material'
+import { format } from 'date-fns'
 
 const CardHeader = styled('div')(() => ({
     paddingLeft: '24px',
@@ -64,11 +66,26 @@ const TopSellingTable = () => {
     const bgError = palette.error.main
     const bgPrimary = palette.primary.main
     const bgSecondary = palette.secondary.main
+    const [alert, setAlert] = useState([])
+
+    const handleRemove = (index, id) => {
+        axios
+            .put(`http://localhost:4000/api/recurso/updateRecursoAlert/${id}`, {
+                alerta: false,
+            })
+    }
+
+    useEffect(() => {
+        axios.get(`http://localhost:4000/api/recurso/getRecursoAlerta`)
+            .then((response) => {
+                setAlert(response.data.recurso)
+            })
+    }, [alert])
 
     return (
         <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
             <CardHeader>
-                <Title>top selling products</Title>
+                <Title>Productos por agotarse</Title>
                 <Select size="small" defaultValue="this_month">
                     <MenuItem value="this_month">This Month</MenuItem>
                     <MenuItem value="last_month">Last Month</MenuItem>
@@ -79,46 +96,40 @@ const TopSellingTable = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell sx={{ px: 3 }} colSpan={4}>
-                                Name
+                                Alerta
                             </TableCell>
                             <TableCell sx={{ px: 0 }} colSpan={2}>
-                                Revenue
+                                Fecha
                             </TableCell>
-                            <TableCell sx={{ px: 0 }} colSpan={2}>
+                            {/* <TableCell sx={{ px: 0 }} colSpan={2}>
                                 Stock Status
-                            </TableCell>
+                            </TableCell>  */}
                             <TableCell sx={{ px: 0 }} colSpan={1}>
-                                Action
+                                Accion
                             </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {productList.map((product, index) => (
+                        {alert.map((resource, index) => (
                             <TableRow key={index} hover>
                                 <TableCell
                                     colSpan={4}
                                     align="left"
                                     sx={{ px: 0, textTransform: 'capitalize' }}
                                 >
-                                    <Box display="flex" alignItems="center">
-                                        <Avatar src={product.imgUrl} />
-                                        <Paragraph sx={{ m: 0, ml: 4 }}>
-                                            {product.name}
-                                        </Paragraph>
-                                    </Box>
+                                    <Paragraph sx={{ m: 0, ml: 4 }}>
+                                        <strong>{resource.nombre}:</strong> Stock mínimo: <strong>{resource.stockMinimo} {resource.medida}</strong>, su stock actual es:  <Small bgcolor={resource.stock === 0 ? bgError : bgSecondary}><strong>{resource.stock} {resource.medida}</strong>.</Small>
+                                    </Paragraph>
+
                                 </TableCell>
                                 <TableCell
                                     align="left"
                                     colSpan={2}
                                     sx={{ px: 0, textTransform: 'capitalize' }}
                                 >
-                                    $
-                                    {product.price > 999
-                                        ? (product.price / 1000).toFixed(1) +
-                                        'k'
-                                        : product.price}
+                                    {format(new Date(resource.updatedAt), 'MM/dd/yyyy hh:mma')}
                                 </TableCell>
-
+                                {/* 
                                 <TableCell
                                     sx={{ px: 0 }}
                                     align="left"
@@ -127,7 +138,7 @@ const TopSellingTable = () => {
                                     {product.available ? (
                                         product.available < 20 ? (
                                             <Small bgcolor={bgSecondary}>
-                                                {product.available} available
+                                               <strong>{resource.stock} {resource.medida}</strong>.
                                             </Small>
                                         ) : (
                                             <Small bgcolor={bgPrimary}>
@@ -139,10 +150,10 @@ const TopSellingTable = () => {
                                             out of stock
                                         </Small>
                                     )}
-                                </TableCell>
+                                </TableCell>  */}
                                 <TableCell sx={{ px: 0 }} colSpan={1}>
                                     <IconButton>
-                                        <Icon color="primary">edit</Icon>
+                                        <Icon onClick={() => handleRemove(index, resource._id)} color="primary">delete</Icon>
                                     </IconButton>
                                 </TableCell>
                             </TableRow>

@@ -19,14 +19,11 @@ const RecursoSchema = new Schema({
         type: String,
         required: true
     },
-    cantidad: {
-        type: Number,
-    },
     medida: {
         type: String,
         required: true,
     },
-    stockMaximo: {
+    stock: {
         type: Number,
         default: false,
     },
@@ -36,6 +33,9 @@ const RecursoSchema = new Schema({
     },
     estado: {
         type: String,
+    },
+    alerta: {
+        type: Boolean,
     }
 },
     {
