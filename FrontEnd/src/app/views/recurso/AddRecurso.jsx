@@ -39,6 +39,7 @@ const AddRecurso = () => {
     precio: '',
     stockMinimo: '',
     descripcion: '',
+    cantidad: '',
   })
   const { search } = useLocation()
   const searchParam = new URLSearchParams(search)
@@ -103,12 +104,14 @@ const AddRecurso = () => {
       console.log("🚀 ~ file: AddRecurso.jsx ~ line 102 ~ createRecurso ~ error", error)
     }
   }
+  const newStock = (recurso.stock) - (recurso.cantidad)
   const updateRecurso = async () => {
     try {
+      console.log("🚀 ~ file: AddRecurso.jsx ~ line 110 ~ updateRecurso ~ newStock", newStock)
       const form = new FormData();
       form.append('nombre', recurso.nombre)
       form.append('medida', recurso.medida)
-      form.append('stock', recurso.stock)
+      form.append('stock', newStock)
       form.append('precio', recurso.precio)
       form.append('stockMinimo', recurso.stockMinimo)
       form.append('descripcion', recurso.descripcion)
@@ -229,9 +232,11 @@ const AddRecurso = () => {
       ],
     })
   }
+  console.log('stock', recurso.stock)
+  console.log('stock minimo:', recurso.stockMinimo)
+  console.log('s <= sm:', newStock <= recurso.stockMinimo)
   const checkStock = () => {
-    if (recurso.stock && recurso.stock <= recurso.stockMinimo) {
-      //push
+    if (recurso.stock && newStock <= recurso.stockMinimo) {
       axios
         .put(`${apiUrl}/recurso/updateRecursoAlert/${idRecurso}`, {
           alerta: true,
@@ -245,7 +250,6 @@ const AddRecurso = () => {
           }
         )
     } else {
-      console.log('else')
       axios
         .put(`${apiUrl}/recurso/updateRecursoAlert/${idRecurso}`, {
           alerta: false,
@@ -321,6 +325,19 @@ const AddRecurso = () => {
                       value={recurso.stockMinimo}
                       validators={['required']}
                       errorMessages={['Este campo es requerido']}
+                      disabled={isEditable === 'false'}
+                    />
+                    : ''
+                }
+                {
+                  isEditable == 'true'
+                    ?
+                    <TextField
+                      label="Cantidad recurso utilizado"
+                      onChange={handleChange}
+                      type="text"
+                      name="cantidad"
+                      value={recurso.cantidad}
                       disabled={isEditable === 'false'}
                     />
                     : ''
