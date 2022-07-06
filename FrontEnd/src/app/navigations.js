@@ -98,6 +98,22 @@ export const navigations = [
             },
         ],
     },
+    {
+        name: 'Pedido',
+        icon: 'computer',
+        children: [
+            // {
+            //     name: 'Agregar pedido',
+            //     iconText: 'AP',
+            //     path: '/pago/agregar',
+            // },
+            {
+                name: 'Listar pedidos',
+                iconText: 'LP',
+                path: '/pago/listar',
+            },
+        ],
+    }
     // {
     //     label: 'Components',
     //     type: 'label',
