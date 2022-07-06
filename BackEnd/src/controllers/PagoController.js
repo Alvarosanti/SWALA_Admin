@@ -22,7 +22,23 @@ const getOnePagos = async (req,res) => {
     }
 }
 
+const updatePagoState = async (req, res) => {
+    try {
+        const { estado } = req.body;
+        const id = { _id: req.params.id };
+        await Pagos.findOneAndUpdate(id, {
+            estado,
+        })
+        res.send()
+    } catch (error) {
+        console.log("🚀 ~ file: ProductController.js ~ line 105 ~ updateProductState ~ error:", error)
+        throw error
+        // return res.sendStatus(500).json({ message: error.messag })
+    }
+}
+
 module.exports = {
     getPagos,
     getOnePagos,
+    updatePagoState
 };

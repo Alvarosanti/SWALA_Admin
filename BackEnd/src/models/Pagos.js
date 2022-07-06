@@ -22,13 +22,17 @@ const PagoSchema = new Schema({
         required: true
     },
     direccion: {
-        type: String,
-        trim: true,
+        type: Object,
         required: true
     },
     cart: {
         type: Array,
         default: []
+    },
+    estado: {
+        type: String,
+        trim:true,
+        required: true
     },
     fechaEntrega: {
         type: Date,
