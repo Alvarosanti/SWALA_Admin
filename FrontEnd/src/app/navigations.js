@@ -87,11 +87,6 @@ export const navigations = [
         icon: 'computer',
         children: [
             {
-                name: 'Agregar orden de compra',
-                iconText: 'AP',
-                path: '/oc/agregar',
-            },
-            {
                 name: 'Listar orden de compra',
                 iconText: 'LP',
                 path: '/oc/listar',

@@ -40,6 +40,7 @@ const AddProduct = () => {
     precio: '',
     descripcion: '',
   })
+  console.log("🚀 ~ file: AddProduct.jsx ~ line 43 ~ AddProduct ~ categoria:", product.categoria)
   const { search } = useLocation()
   const searchParam = new URLSearchParams(search)
   const isEditable = searchParam.get('isEditable')
@@ -54,7 +55,7 @@ const AddProduct = () => {
   const [Transition, setTransition] = useState(undefined);
   const [hasError, setError] = useState(true)
   const [category, setCategory] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState('')
 
   useEffect(() => {
     if (idProduct !== null && isEditable !== null) {
@@ -167,29 +168,11 @@ const AddProduct = () => {
     )
   }
 
+  const handleChangeCategory = (event) => {
+    setSelectedCategory(event.target.value);
+  }
+
   const imgManage = () => {
-    // console.log('imagen: ', imagen)
-
-    // Object.entries(imagen).forEach(([key, value]) => {
-    //   console.log(key)
-    //   console.log(value)
-    // })
-    // {
-    //   product.images.map((item, index) => (
-    //     console.log('item: ', item, 'index:', index)
-    //     // Object.entries(item).forEach(([key, value])
-
-    //     // item.map((val, inde) => {
-
-    //     //   console.log('val:', val)
-    //     //   console.log('item:', item)
-    //     //   console.log('val inde:', val[inde])
-    //     //   console.log('val index:', val[index])
-    //     // })
-    //     // console.log('item:', item[1])
-
-    //   ))
-    // }
     return (
       idProduct !== null
         ? isEditable === 'true'
@@ -411,27 +394,25 @@ const AddProduct = () => {
                     disabled={isEditable === 'false'}
                   />
                   :
-                  <div>
-                    < FormControl fullWidth>
-                      <InputLabel id="demo-simple-select-label">Categoria</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={selectedCategory}
-                        label="Categoria"
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                        defaultValue={product.categoria}
-                      >
-                        {
-                          category.map((categoria, index) => (
-                            <MenuItem key={index} value={categoria.nombre}>{categoria.nombre}</MenuItem>)
-                          )
-                        }
-                      </Select>
-                    </FormControl>
+                  < FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Categoria</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      name="categoria"
+                      value={selectedCategory || product.categoria}
+                      label="Categoria"
+                      onChange={handleChangeCategory}
+                    >
+                      {
+                        category.map((categoria, index) => (
+                          <MenuItem key={index} value={categoria.nombre}>{categoria.nombre}</MenuItem>)
+                        )
+                      }
+                    </Select>
                     <br />
                     <br />
-                  </div>
+                  </FormControl>
                 }
 
                 {imgManage()}
@@ -441,7 +422,7 @@ const AddProduct = () => {
                 <TextField
                   label="Precio"
                   onChange={handleChange}
-                  type="text"
+                  type="number"
                   name="precio"
                   value={product.precio || ''}
                   validators={['required']}

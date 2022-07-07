@@ -138,7 +138,7 @@ const AddProvider = () => {
       form.append('contacto', provider.contacto)
       form.append('celular', provider.celular)
       form.append('descuento', provider.descuento)
-      form.append('recurso', resourceName)
+      form.append('recurso', arr)
       await axios.put(`${apiUrl}/provider/updateProvider/${idProvider}`,
         form, {
         headers: {
@@ -231,17 +231,18 @@ const AddProvider = () => {
                 <TextField
                   label="RUC"
                   onChange={handleChange}
-                  type="text"
+                  type="number"
                   name="ruc"
                   value={provider.ruc || ''}
                   validators={['required']}
                   errorMessages={['this field is required']}
                   disabled={isEditable === 'false'}
+                  error={provider.ruc.length > 11 ? true : false}
                 />
                 <TextField
                   label="Correo"
                   onChange={handleChange}
-                  type="text"
+                  type="email"
                   name="correo"
                   value={provider.correo || ''}
                   validators={['required']}
@@ -295,12 +296,13 @@ const AddProvider = () => {
                 <TextField
                   label="Celular"
                   onChange={handleChange}
-                  type="text"
+                  type="number"
                   name="celular"
                   value={provider.celular || ''}
                   validators={['required']}
                   errorMessages={['this field is required']}
                   disabled={isEditable === 'false'}
+                  error={provider.celular.length > 9 ? true : false}
                 />
                 <TextField
                   label="Descuento %"
@@ -318,7 +320,7 @@ const AddProvider = () => {
             {
               !isEditable || isEditable !== 'false'
                 ? (
-                  < Button onClick={handleClick(TransitionRight)} color="primary" variant="contained" type="submit" >
+                  < Button disabled={provider.ruc.length > 11 || provider.celular.length > 9 ? true : false} onClick={handleClick(TransitionRight)} color="primary" variant="contained" type="submit" >
                     <Icon>add_box</Icon>
                     <Span sx={{ pl: 1, textTransform: 'capitalize' }}>
                       {

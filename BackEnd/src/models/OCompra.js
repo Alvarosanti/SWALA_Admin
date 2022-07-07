@@ -1,16 +1,33 @@
 const { Schema, model } = require('mongoose')
 
 const OCSchema = new Schema({
-    numeroOC: {
+    recursos: {
+        type: Object,
+    },
+    nombreRecurso: {
+        tyep: String,
+    },
+    precioRecurso: {
+        type: Number,
+    },
+    cantidadPedido: {
+        type: Number,
+    },
+    unidadMedida: {
         type: String,
-        required: true,
+    },
+    subtotal: {
+        type: Number,
+    },
+    numeroOc: {
+        type: String,
         trim: true
     },
-    proveedor_id: {
+    proveedor_ruc: {
         type: String,
-        required: true,
-        trim: true,
-        unique: true
+    },
+    razon_social: {
+        type: String,
     },
     estado: {
         type: String,
@@ -18,17 +35,13 @@ const OCSchema = new Schema({
     },
     total: {
         type: Number,
-        default: 0
     },
-    recursos: {
+    fechaCreacion: {
         type: String,
-        default: []
     },
     fechaEntrega: {
         type: Date,
-        required: false
     },
-
 }, {
     timestamps: true,
     versionKey: false
