@@ -182,23 +182,23 @@ const ListOc = () => {
                                             )
                                             .map((oc, index) => (
                                                 <TableRow width={900}>
-                                                    <TableCell width={200}>
+                                                    <TableCell key={'1'} width={200}>
                                                         {oc.razon_social}
                                                     </TableCell>
-                                                    <TableCell align="left" width={100}>
+                                                    <TableCell key={'2'} align="left" width={100}>
                                                         {oc.numeroOc}
                                                     </TableCell>
-                                                    <TableCell align="left" width={100}>
+                                                    <TableCell key={'3'} align="left" width={100}>
                                                         {oc.fechaCreacion}
                                                     </TableCell>
-                                                    <TableCell align="left" width={100}>
+                                                    <TableCell key={'4'} align="left" width={100}>
                                                         {oc.recursos.nombreRecurso}
                                                     </TableCell>
-                                                    <TableCell align="left" width={100}>
+                                                    <TableCell key={'5'} align="left" width={100}>
                                                         {oc.recursos.subtotal}
                                                     </TableCell>
-                                                    <TableCell width={60}>{oc.estado}</TableCell>
-                                                    <TableCell align="left" width={40}>
+                                                    <TableCell key={'6'} width={60}>{oc.estado}</TableCell>
+                                                    <TableCell key={'7'} align="left" width={40}>
                                                         <Tooltip title="Visualizar">
                                                             <IconButton
                                                                 onClick={() => handleOcDetail(oc._id)}
@@ -211,15 +211,15 @@ const ListOc = () => {
                                             ))
                                         :
                                         <TableRow>
-                                            <TableCell />
-                                            <TableCell />
-                                            <TableCell>
+                                            <TableCell key={'1'} />
+                                            <TableCell key={'2'} />
+                                            <TableCell key={'3'}>
                                                 No data
                                                 <br />
                                                 &nbsp;&nbsp;&nbsp;<img src="https://img.icons8.com/windows/32/undefined/no-data-availible.png" />
                                             </TableCell>
-                                            <TableCell />
-                                            <TableCell />
+                                            <TableCell key={'4'} />
+                                            <TableCell key={'5'} />
                                         </TableRow>
                                     }
                                 </TableBody>

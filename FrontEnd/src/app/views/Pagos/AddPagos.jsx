@@ -83,126 +83,60 @@ const AddPagos = () => {
         if (event.target.value == 10) {
             axios.put(`${apiUrl}/pagos/updatePagoState/${idPagos}`, {
                 estado: 'Pendiente',
-            }) .then(
-                         (response) => {
-                          setEstado(event.target.value)
-                         },
-                          (error) => {
-                              console.log(
-                                   '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
-                                   error
-                               )
-                           }
-                     )
+            }).then(
+                (response) => {
+                    setEstado(event.target.value)
+                },
+                (error) => {
+                    console.log(
+                        '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
+                        error
+                    )
+                }
+            )
         } else if (event.target.value == 20) {
-          axios.put(`${apiUrl}/pagos/updatePagoState/${idPagos}`, {
-            estado: 'En proceso',
-        }).then(
-          (response) => {
-           setEstado(event.target.value)
-          },
-           (error) => {
-               console.log(
-                    '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
-                    error
-                )
-            }
-      )
+            axios.put(`${apiUrl}/pagos/updatePagoState/${idPagos}`, {
+                estado: 'En proceso',
+            }).then(
+                (response) => {
+                    setEstado(event.target.value)
+                },
+                (error) => {
+                    console.log(
+                        '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
+                        error
+                    )
+                }
+            )
         } else if (event.target.value == 30) {
-          axios.put(`${apiUrl}/pagos/updatePagoState/${idPagos}`, {
-            estado: 'Terminado',
-        }).then(
-          (response) => {
-           setEstado(event.target.value)
-          },
-           (error) => {
-               console.log(
-                    '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
-                    error
-                )
-            }
-      )
+            axios.put(`${apiUrl}/pagos/updatePagoState/${idPagos}`, {
+                estado: 'Terminado',
+            }).then(
+                (response) => {
+                    setEstado(event.target.value)
+                },
+                (error) => {
+                    console.log(
+                        '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
+                        error
+                    )
+                }
+            )
         } else if (event.target.value == 40) {
-          axios.put(`${apiUrl}/pagos/updatePagoState/${idPagos}`, {
-            estado: 'Entregado',
-        }).then(
-          (response) => {
-           setEstado(event.target.value)
-          },
-           (error) => {
-               console.log(
-                    '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
-                    error
-                )
-            }
-      )
+            axios.put(`${apiUrl}/pagos/updatePagoState/${idPagos}`, {
+                estado: 'Entregado',
+            }).then(
+                (response) => {
+                    setEstado(event.target.value)
+                },
+                (error) => {
+                    console.log(
+                        '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
+                        error
+                    )
+                }
+            )
         }
-        // if (event.target.value === 'Pendiente') {
-        //     axios
-        //         .put(`${apiUrl}/pagos/updatePagoState/${idPedido}`, {
-        //             estado: 'Pendiente',
-        //         })
-        //         .then(
-        //             (response) => {
-
-        //             },
-        //             (error) => {
-        //                 console.log(
-        //                     '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
-        //                     error
-        //                 )
-        //             }
-        //         )
-        // } else {
-        //     if (event.target.value === 'En proceso') {
-        //         axios
-        //             .put(`${apiUrl}/pagos/updatePagoState/${idPedido}`, {
-        //                 estado: 'En proceso',
-        //             })
-        //             .then(
-        //                 (response) => {
-        //                 },
-        //                 (error) => {
-        //                     console.log(
-        //                         '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
-        //                         error
-        //                     )
-        //                 }
-        //             )
-        //     } else {
-        //         if (event.target.value === 'Terminado') {
-        //             axios
-        //                 .put(`${apiUrl}/pagos/updatePagoState/${idPedido}`, {
-        //                     estado: 'Terminado',
-        //                 })
-        //                 .then(
-        //                     (response) => {
-        //                     },
-        //                     (error) => {
-        //                         console.log(
-        //                             '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
-        //                             error
-        //                         )
-        //                     }
-        //                 )
-        //         } else {
-        //             axios
-        //                 .put(`${apiUrl}/pagos/updatePagoState/${idPedido}`, {
-        //                     estado: 'Entregado',
-        //                 })
-        //                 .then(
-        //                     (response) => {
-        //                     },
-        //                     (error) => {
-        //                         console.log(
-        //                             '🚀 ~ file: ListProduct.jsx ~ line 110 ~ handleChangeState ~ error',
-        //                             error
-        //                         )
-        //                     }
-        //                 )
-        //         }
-        //     }
-        // }
     }
 
     const { search } = useLocation()
@@ -231,12 +165,7 @@ const AddPagos = () => {
         if (idPagos !== null && isEditable !== null) {
             axios.get(`${apiUrl}/pagos/${idPagos}`).then(
                 (response) => {
-                    console.log(response.data.pagos)
                     setPagos(response.data.pagos)
-                    console.log(
-                        '🚀 ~ file: AddPagos.jsx ~ line 84 ~ .then ~ response.data.pagos',
-                        response.data.pagos
-                    )
                 },
                 (error) => {
                     console.log(error)
@@ -250,9 +179,9 @@ const AddPagos = () => {
         isEditable == null ? createProduct() : updateProduct()
     }
 
-    const createProduct = async () => {}
+    const createProduct = async () => { }
 
-    const updateProduct = async () => {}
+    const updateProduct = async () => { }
     const handleClick = (Transition) => () => {
         if (hasError == false) {
             setOpen(true)
@@ -279,12 +208,6 @@ const AddPagos = () => {
 
     const dataSource = pagos.cart
     const estadoPedido = pagos.estado
-    console.log(estadoPedido)
-
-    console.log(
-        '🚀 ~ file: AddPagos.jsx ~ line 124 ~ AddPagos ~ dataSource',
-        dataSource
-    )
 
     const tittleName = () => {
         return idPagos !== null

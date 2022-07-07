@@ -98,7 +98,8 @@ export const navigations = [
                 path: '/pago/listar',
             },
         ],
-    }
+    },
+    {
 
         name: 'Orden de compra',
         icon: 'computer',
@@ -109,7 +110,8 @@ export const navigations = [
                 path: '/oc/listar',
             },
         ],
-    },
+    }
+
 
     // {
     //     label: 'Components',

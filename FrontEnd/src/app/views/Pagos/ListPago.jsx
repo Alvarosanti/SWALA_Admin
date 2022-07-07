@@ -132,8 +132,6 @@ const ListPago = () => {
 
     const dataSource = pagos
 
-    console.log(pagos)
-
     return (
         <div>
             {
@@ -179,7 +177,7 @@ const ListPago = () => {
                                                 .slice(
                                                     page * rowsPerPage,
                                                     page * rowsPerPage +
-                                                        rowsPerPage
+                                                    rowsPerPage
                                                 )
                                                 .map((pagos, index) => (
                                                     <TableRow width={600}>
@@ -231,7 +229,7 @@ const ListPago = () => {
                                                             width={120}
                                                         >
                                                             {pagos.estado ==
-                                                            'Pendiente' ? (
+                                                                'Pendiente' ? (
                                                                 <Small
                                                                     bgcolor={
                                                                         bgError
@@ -240,7 +238,7 @@ const ListPago = () => {
                                                                     Pendiente
                                                                 </Small>
                                                             ) : pagos.estado ==
-                                                              'En proceso' ? (
+                                                                'En proceso' ? (
                                                                 <Small
                                                                     bgcolor={
                                                                         bgPrimary
@@ -249,7 +247,7 @@ const ListPago = () => {
                                                                     En proceso
                                                                 </Small>
                                                             ) : pagos.estado ==
-                                                              'Terminado' ? (
+                                                                'Terminado' ? (
                                                                 <Small
                                                                     bgcolor={
                                                                         bgSecondary
