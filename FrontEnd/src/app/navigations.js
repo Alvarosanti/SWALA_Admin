@@ -83,6 +83,23 @@ export const navigations = [
         ],
     },
     {
+
+        name: 'Pedido',
+        icon: 'computer',
+        children: [
+            // {
+            //     name: 'Agregar pedido',
+            //     iconText: 'AP',
+            //     path: '/pago/agregar',
+            // },
+            {
+                name: 'Listar pedidos',
+                iconText: 'LP',
+                path: '/pago/listar',
+            },
+        ],
+    }
+
         name: 'Orden de compra',
         icon: 'computer',
         children: [
@@ -93,6 +110,7 @@ export const navigations = [
             },
         ],
     },
+
     // {
     //     label: 'Components',
     //     type: 'label',

@@ -4,7 +4,12 @@ import chartsRoute from './views/charts/ChartsRoute'
 import dashboardRoutes from './views/dashboard/DashboardRoutes'
 import materialRoutes from './views/material-kit/MaterialRoutes'
 import productsRoutes from './views/products/ProductsRoutes'
+
+import pagoRoutes from './views/Pagos/PagosRoutes'
+import userRoutes from './views/users/UserRoutes'
+
 import userRoutes from './views/oc/OcRoutes'
+
 
 import recursoRoutes from './views/recurso/RecursoRoutes'
 
@@ -32,6 +37,7 @@ const routes = [
     ...redirectRoute,
     ...errorRoute,
     ...productsRoutes,
+    ...pagoRoutes,
     ...userRoutes,
 
     ...recursoRoutes,
