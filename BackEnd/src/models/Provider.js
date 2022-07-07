@@ -28,7 +28,7 @@ const ProviderSchema = new Schema({
     descuento: {
         type: Number,
     },
-    productos: {
+    recurso: {
         type: String,
     }
 }

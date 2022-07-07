@@ -51,22 +51,6 @@ export const navigations = [
         ],
     },
     {
-        name: 'Usuarios',
-        icon: 'computer',
-        children: [
-            {
-                name: 'Agregar usuarios',
-                iconText: 'AP',
-                path: '/usuario/agregar',
-            },
-            {
-                name: 'Listar usuarios',
-                iconText: 'LP',
-                path: '/usuario/listar',
-            },
-        ],
-    },
-    {
         name: 'Proveedores',
         icon: 'computer',
         children: [
@@ -99,6 +83,7 @@ export const navigations = [
         ],
     },
     {
+
         name: 'Pedido',
         icon: 'computer',
         children: [
@@ -114,6 +99,18 @@ export const navigations = [
             },
         ],
     }
+
+        name: 'Orden de compra',
+        icon: 'computer',
+        children: [
+            {
+                name: 'Listar orden de compra',
+                iconText: 'LP',
+                path: '/oc/listar',
+            },
+        ],
+    },
+
     // {
     //     label: 'Components',
     //     type: 'label',

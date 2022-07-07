@@ -8,5 +8,6 @@ router.route('/:id').get(providerController.getOneProvider)
 router.route('/updateProvider/:id').put(providerController.updateProvider)
 router.route('/updateProviderState/:id').put(providerController.updateProviderState)
 router.route('/deleteProvider/:id').delete(providerController.deleteProvider)
+router.route('/mail').post(providerController.sendEmailProvider)
 
 module.exports = router;

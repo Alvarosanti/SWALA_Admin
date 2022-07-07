@@ -22,7 +22,7 @@ app.use('/api/pagos', require('./src/routes/PagoRoutes'))
 app.use('/api/product', require('./src/routes/ProductRoutes'))
 app.use('/api/provider', require('./src/routes/ProviderRoutes'))
 app.use('/api/recurso', require('./src/routes/RecursoRoutes'))
-app.use('/api/user', require('./src/routes/UserRoutes'))
+app.use('/api/oc', require('./src/routes/OCRoutes'))
 app.use('/api/category', require('./src/routes/CategoryRoutes'))
 
 

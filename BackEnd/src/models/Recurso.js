@@ -19,9 +19,6 @@ const RecursoSchema = new Schema({
         type: String,
         required: true
     },
-    cantidad: {
-        type: Number,
-    },
     medida: {
         type: String,
         required: true,
@@ -30,13 +27,20 @@ const RecursoSchema = new Schema({
         type: Number,
         default: false,
     },
+    stockMinimo: {
+        type: Number,
+        default: false,
+    },
     estado: {
         type: String,
+    },
+    alerta: {
+        type: Boolean,
     }
-}, 
-{
-    timestamps: true,
-    versionKey: false
-})
+},
+    {
+        timestamps: true,
+        versionKey: false
+    })
 
 module.exports = model('Recurso', RecursoSchema, 'Recurso')
