@@ -72,6 +72,9 @@ const AddPagos = () => {
         nombre: '',
         email: '',
         cart: [],
+        direccion: {
+            line1: ''
+        }
     })
 
     const [estado, setEstado] = React.useState('')
@@ -408,7 +411,7 @@ const AddPagos = () => {
                                     onChange={handleChange}
                                     type="text"
                                     name="direccionEntrega"
-                                    value={pagos.direccion || ''}
+                                    value={pagos.direccion.line1 || ''}
                                     validators={['required']}
                                     errorMessages={['this field is required']}
                                     disabled={isEditable === 'false'}
@@ -424,21 +427,6 @@ const AddPagos = () => {
                                 xs={12}
                                 sx={{ mt: 2 }}
                             >
-                                {/* {pagos.cart.map((item, index) => (
-                                    <TextField
-                                        label="Fecha de registro"
-                                        onChange={handleChange}
-                                        type="text"
-                                        name="fecha"
-                                        value={pagos.createdAt || ''}
-                                        validators={['required']}
-                                        errorMessages={[
-                                            'this field is required',
-                                        ]}
-                                        disabled={isEditable === 'false'}
-                                    />
-                                ))} */}
-
                                 <TextField
                                     label="Fecha de registro"
                                     onChange={handleChange}
@@ -453,7 +441,6 @@ const AddPagos = () => {
                                     errorMessages={['this field is required']}
                                     disabled={isEditable === 'false'}
                                 />
-
                                 <TextField
                                     label="Fecha de entrega"
                                     onChange={handleChange}
@@ -468,16 +455,6 @@ const AddPagos = () => {
                                     errorMessages={['this field is required']}
                                     disabled={isEditable === 'false'}
                                 />
-                                {/* <TextField
-                                    label="Estado"
-                                    onChange={handleChange}
-                                    type="text"
-                                    name="estado"
-                                    value={pagos.estado || ''}
-                                    validators={['required']}
-                                    errorMessages={['this field is required']}
-                                    disabled={isEditable === 'false'}
-                                /> */}
                                 <Box sx={{ minWidth: 120 }}>
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">

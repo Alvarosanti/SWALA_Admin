@@ -73,8 +73,15 @@ const createOC = async (req, res) => {
     }
 }
 
-const getOneOC = (req, res) => {
-    res.json({ message: 'one user' })
+const getOneOC = async (req, res) => {
+    try {
+        const id = req.params.id
+        const oc = await OC.findById(id)
+        if (!oc) return res.sendStatus(404)
+        return res.json({ oc })
+    } catch (error) {
+        return res.status(500).json({ message: error.messag })
+    }
 }
 
 const updateOC = (req, res) => {

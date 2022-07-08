@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid, Card, Icon, IconButton, Tooltip } from '@mui/material'
 import { Box, styled } from '@mui/system'
 import { Small } from 'app/components/Typography'
+import axios from 'axios'
 
 const StyledCard = styled(Card)(({ theme }) => ({
     display: 'flex',
@@ -37,7 +38,33 @@ const Heading = styled('h6')(({ theme }) => ({
     color: theme.palette.primary.main,
 }))
 
+const apiUrl = 'http://localhost:4000/api'
+
 const StatCards = () => {
+    const [pagos, setPagos] = useState([])
+
+    useEffect(() => {
+        axios.get(`${apiUrl}/pagos`).then(
+            (response) => {
+                setPagos(response.data.pagos)
+                console.log(response.data.pagos)
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+    }, [])
+
+    // let arr = []
+    // pagos.map((item, index) => {
+    //     let carrito = item.cart
+    //     carrito.map((item, index) => {
+    //         arr.push(item.precio)
+    //     })
+    // })
+    // const reducer = (accu, curr) => accu + curr;
+    // console.log(arr.reduce(reducer))
+
     return (
         <Grid container spacing={3} sx={{ mb: '24px' }}>
             <Grid item xs={12} md={6}>
@@ -45,8 +72,8 @@ const StatCards = () => {
                     <ContentBox>
                         <Icon className="icon">group</Icon>
                         <Box ml="12px">
-                            <Small>New Leads</Small>
-                            <Heading>3050</Heading>
+                            <Small>Cantidad de ventas</Small>
+                            <Heading>a</Heading>
                         </Box>
                     </ContentBox>
                     <Tooltip title="View Details" placement="top">
@@ -62,9 +89,9 @@ const StatCards = () => {
                         <Icon className="icon">attach_money</Icon>
                         <Box ml="12px">
                             <Small sx={{ lineHeight: 1 }}>
-                                This week Sales
+                                Ventas registradas S/.
                             </Small>
-                            <Heading>$80,500</Heading>
+                            <Heading>S/.{ }</Heading>
                         </Box>
                     </ContentBox>
                     <Tooltip title="View Details" placement="top">

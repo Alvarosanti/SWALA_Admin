@@ -115,7 +115,7 @@ const AddRecurso = () => {
       console.log("🚀 ~ file: AddRecurso.jsx ~ line 110 ~ updateRecurso ~ newStock", newStock)
       const form = new FormData();
       form.append('nombre', recurso.nombre)
-      form.append('medida', uMedida)
+      form.append('medida', uMedida || recurso.medida)
       form.append('stock', newStock)
       form.append('precio', recurso.precio)
       form.append('stockMinimo', recurso.stockMinimo)

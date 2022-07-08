@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Paragraph } from 'app/components/Typography'
 import { Box, styled, useTheme } from '@mui/system'
+
 import {
     Card,
     Icon,
@@ -14,6 +15,7 @@ import {
     Avatar,
     MenuItem,
     Select,
+    Tooltip,
 } from '@mui/material'
 import { format } from 'date-fns'
 
@@ -86,10 +88,10 @@ const TopSellingTable = () => {
         <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
             <CardHeader>
                 <Title>Productos por agotarse</Title>
-                <Select size="small" defaultValue="this_month">
+                {/* <Select size="small" defaultValue="this_month">
                     <MenuItem value="this_month">This Month</MenuItem>
                     <MenuItem value="last_month">Last Month</MenuItem>
-                </Select>
+                </Select> */}
             </CardHeader>
             <Box overflow="auto">
                 <ProductTable>
@@ -99,7 +101,7 @@ const TopSellingTable = () => {
                                 Alerta
                             </TableCell>
                             <TableCell sx={{ px: 0 }} colSpan={2}>
-                                Fecha
+                                Fecha registro
                             </TableCell>
                             {/* <TableCell sx={{ px: 0 }} colSpan={2}>
                                 Stock Status
@@ -152,9 +154,11 @@ const TopSellingTable = () => {
                                     )}
                                 </TableCell>  */}
                                 <TableCell sx={{ px: 0 }} colSpan={1}>
-                                    <IconButton>
-                                        <Icon onClick={() => handleRemove(index, resource._id)} color="primary">delete</Icon>
-                                    </IconButton>
+                                    <Tooltip title="Eliminar" placement="top">
+                                        <IconButton>
+                                            <Icon onClick={() => handleRemove(index, resource._id)} color="primary">delete</Icon>
+                                        </IconButton>
+                                    </Tooltip>
                                 </TableCell>
                             </TableRow>
                         ))}
