@@ -43,7 +43,7 @@ const updateRecursoAlert = async (req, res) => {
 
 const createRecurso = async (req, res) => {
     try {
-        const { recurso_id, nombre, medida, stock, precio, stockMinimo, descripcion } = req.body;
+        const { recurso_id, nombre, medida, stock, precio, stockMinimo, descripcion, cantidadComprar } = req.body;
         const newRecurso = new Recurso({
             recurso_id,
             nombre,
@@ -53,7 +53,8 @@ const createRecurso = async (req, res) => {
             stockMinimo,
             descripcion,
             estado: "habilitado",
-            alerta: false
+            alerta: false,
+            cantidadComprar,
         });
         await newRecurso.save();
         res.json({ message: 'Recurso saved', newRecurso })
@@ -84,7 +85,7 @@ const getOneRecurso = async (req, res) => {
 
 const updateRecurso = async (req, res) => {
     try {
-        const { nombre, medida, stock, precio, stockMinimo, descripcion } = req.body;
+        const { nombre, medida, stock, precio, stockMinimo, descripcion, cantidadComprar } = req.body;
         const id = { _id: req.params.id };
         await Recurso.findOneAndUpdate(id, {
             nombre,
@@ -93,6 +94,7 @@ const updateRecurso = async (req, res) => {
             precio,
             stockMinimo,
             descripcion,
+            cantidadComprar,
         })
         res.json({ message: 'recurso updated' })
     } catch (error) {

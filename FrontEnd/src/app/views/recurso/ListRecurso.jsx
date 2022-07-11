@@ -71,6 +71,8 @@ const ListRecurso = () => {
     const [search, setSearch] = useState('')
     const navigate = useNavigate()
 
+
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
     }
@@ -264,6 +266,7 @@ const ListRecurso = () => {
                                                                 {recurso.recurso_id}
                                                             </TableCell>
                                                             <TableCell align="left" width={100}>
+                                                                {/* {(recurso.precio).toString().indexOf('.') == 2 ? recurso.precio : `${recurso.precio}.00`} */}
                                                                 {recurso.precio}
                                                             </TableCell>
                                                             <TableCell align="left" width={100}>

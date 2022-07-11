@@ -12,7 +12,6 @@ const RecursoSchema = new Schema({
     },
     precio: {
         type: Number,
-        trim: true,
         required: true
     },
     descripcion: {
@@ -36,6 +35,9 @@ const RecursoSchema = new Schema({
     },
     alerta: {
         type: Boolean,
+    },
+    cantidadComprar: {
+        type: Number,
     }
 },
     {

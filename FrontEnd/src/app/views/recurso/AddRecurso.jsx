@@ -40,10 +40,12 @@ const AddRecurso = () => {
     nombre: '',
     medida: '',
     stock: '',
-    precio: '',
+    precio: 0.00,
     stockMinimo: '',
     descripcion: '',
     cantidad: '',
+    cantidadComprar: '',
+    abastecimiento: '',
   })
   const { search } = useLocation()
   const searchParam = new URLSearchParams(search)
@@ -81,6 +83,7 @@ const AddRecurso = () => {
       ? createRecurso()
       : updateRecurso()
   }
+
   const createRecurso = async () => {
     function generatorNumber(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -95,9 +98,10 @@ const AddRecurso = () => {
       form.append('nombre', recurso.nombre)
       form.append('medida', uMedida)
       form.append('stock', recurso.stock)
-      form.append('precio', recurso.precio)
+      form.append('precio', Number(recurso.precio).toFixed(2))
       form.append('stockMinimo', recurso.stockMinimo)
       form.append('descripcion', recurso.descripcion)
+      form.append('cantidadComprar', recurso.cantidadComprar)
       await axios.post(`${apiUrl}/recurso/createRecurso`,
         form, {
         headers: {
@@ -106,20 +110,22 @@ const AddRecurso = () => {
       })
       navigate('/recurso/listar')
     } catch (error) {
-      console.log("🚀 ~ file: AddRecurso.jsx ~ line 102 ~ createRecurso ~ error", error)
     }
   }
+
   const newStock = (recurso.stock) - (recurso.cantidad)
+  const refill = (newStock + parseInt(recurso.abastecimiento))
+
   const updateRecurso = async () => {
     try {
-      console.log("🚀 ~ file: AddRecurso.jsx ~ line 110 ~ updateRecurso ~ newStock", newStock)
       const form = new FormData();
       form.append('nombre', recurso.nombre)
       form.append('medida', uMedida || recurso.medida)
-      form.append('stock', newStock)
-      form.append('precio', recurso.precio)
+      form.append('stock', recurso.abastecimiento == 0 ? newStock : refill)
+      form.append('precio', Number(recurso.precio).toFixed(2))
       form.append('stockMinimo', recurso.stockMinimo)
       form.append('descripcion', recurso.descripcion)
+      form.append('cantidadComprar', recurso.cantidadComprar)
       await axios.put(`${apiUrl}/recurso/updateRecurso/${idRecurso}`,
         form, {
         headers: {
@@ -129,7 +135,6 @@ const AddRecurso = () => {
       checkStock()
       navigate('/recurso/listar')
     } catch (error) {
-      console.log("🚀 ~ file: AddRecurso.jsx ~ line 127 ~ updateRecurso ~ error", error)
     }
   }
 
@@ -180,30 +185,40 @@ const AddRecurso = () => {
     setUmedida(event.target.value);
   }
 
+  let cantidadOc = recurso.cantidadComprar - newStock
+  console.log('cantidad comprar', recurso.cantidadComprar)
+  console.log('newStock', recurso.newStock)
   const ocCompra = () => {
+
     function generatorNumber(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
     const form = new FormData();
     form.append('nombreRecurso', recurso.nombre)
     form.append('precioRecurso', recurso.precio)
-    form.append('cantidadPedido', recurso.stock)
+    form.append('cantidadPedido', cantidadOc)
     form.append('codigoRecurso', recurso.recurso_id)
     form.append('unidadMedida', recurso.medida)
     form.append('numeroOc', generatorNumber(0, 10000))
+    try {
 
-    axios.post(`${apiUrl}/oc/createOc`,
-      form, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      }
-    })
+      axios.post(`${apiUrl}/oc/createOc`,
+        form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      })
+    } catch (error) {
+      console.log('No tiene un proveedor asignado')
+    }
   }
 
   const checkStock = () => {
-    console.log('recurso', recurso.stock)
-    if (newStock === 0) {
-      ocCompra()
+    if (recurso.cantidad !== 0) {
+      if (recurso.abastecimiento == 0 && newStock <= recurso.stockMinimo) {
+        console.log('first')
+        ocCompra()
+      }
     }
     if (recurso.stock && newStock <= recurso.stockMinimo) {
       axios
@@ -214,7 +229,6 @@ const AddRecurso = () => {
           (response) => {
           },
           (error) => {
-            console.log("🚀 ~ file: AddRecurso.jsx ~ line 249 ~ useEffect ~ error", error)
           }
         )
     } else {
@@ -226,11 +240,17 @@ const AddRecurso = () => {
           (response) => {
           },
           (error) => {
-            console.log("🚀 ~ file: AddRecurso.jsx ~ line 249 ~ useEffect ~ error", error)
           }
         )
     }
   }
+  console.log('recurso.cantidad > recurso.stock ', recurso.cantidad > recurso.stock)
+  console.log('recurso.abastecimiento > recurso.cantidadComprar', recurso.abastecimiento > recurso.cantidadComprar)
+
+  console.log('recurso.abastecimiento ', recurso.abastecimiento)
+  console.log('recurso.cantidadComprar', recurso.cantidadComprar)
+  console.log('umedida', uMedida)
+
 
   return (
     <Container>
@@ -272,15 +292,41 @@ const AddRecurso = () => {
                   disabled={isEditable === 'false'}
                 />
                 <TextField
-                  label="Stock"
+                  label="Cantidad a comprar"
                   onChange={handleChange}
                   type="number"
-                  name="stock"
-                  value={recurso.stock}
+                  name="cantidadComprar"
+                  value={recurso.cantidadComprar}
                   validators={['required']}
                   errorMessages={['Este campo es requerido']}
                   disabled={isEditable === 'false'}
                 />
+                {
+                  //cantidad que sumara al stock actual en editar recurso
+                  isEditable === 'true'
+                    ?
+                    <TextField
+                      label="Abastecimiento"
+                      onChange={handleChange}
+                      type="number"
+                      name="abastecimiento"
+                      value={recurso.abastecimiento}
+                      validators={['required']}
+                      errorMessages={['Este campo es requerido']}
+                      disabled={isEditable === 'false'}
+                    />
+                    :
+                    <TextField
+                      label="Stock"
+                      onChange={handleChange}
+                      type="number"
+                      name="stock"
+                      value={recurso.stock}
+                      validators={['required']}
+                      errorMessages={['Este campo es requerido']}
+                      disabled={isEditable === 'false'}
+                    />
+                }
                 {
                   isEditable == 'false' || idRecurso == null
                     ?
@@ -300,7 +346,7 @@ const AddRecurso = () => {
                   isEditable == 'true'
                     ?
                     <TextField
-                      label="Cantidad recurso utilizado"
+                      label={'Cantidad recurso utilizado'}
                       onChange={handleChange}
                       type="number"
                       name="cantidad"
@@ -339,7 +385,6 @@ const AddRecurso = () => {
                         label="Unidad de Medida"
                         onChange={handleChangeuMedida}
                       >
-                        <MenuItem value={''}>Seleccionar</MenuItem>
                         <MenuItem value={'kilogramos'}>Kilogramos</MenuItem>
                         <MenuItem value={'litros'}>Litros</MenuItem>
                         <MenuItem value={'unidades'}>Unidades</MenuItem>
@@ -347,17 +392,46 @@ const AddRecurso = () => {
                       <br />
                     </FormControl>
                 }
+                {
+                  isEditable == 'true'
+                    ?
+                    <TextField
+                      label="Stock actual"
+                      onChange={handleChange}
+                      type="number"
+                      name="stock"
+                      value={recurso.stock || ''}
+                      validators={['required']}
+                      errorMessages={['Este campo es requerido']}
+                      disabled={isEditable === 'true'}
+                    />
+                    : ''
+                }
+                {
+                  isEditable == 'false'
+                    ?
+                    <TextField
+                      label={`Precio x ${recurso.medida}`}
+                      onChange={handleChange}
+                      type="number"
+                      value={(recurso.precio).toString().indexOf('.') == -1 ? `${recurso.precio}.00` : recurso.precio}
+                      validators={['required']}
+                      errorMessages={['Este campo es requerido']}
+                      disabled={isEditable === 'false'}
+                    />
+                    :
+                    <TextField
+                      label={uMedida !== '' ? `Precio x ${uMedida}` : `Precio x ${recurso.medida}`}
+                      onChange={handleChange}
+                      type="number"
+                      name="precio"
+                      value={recurso.precio || ''}
+                      validators={['required']}
+                      errorMessages={['Este campo es requerido']}
+                      disabled={isEditable === 'false'}
+                    />
+                }
                 <TextField
-                  label="Precio x Unidad Medida"
-                  onChange={handleChange}
-                  type="number"
-                  name="precio"
-                  value={recurso.precio || ''}
-                  validators={['required']}
-                  errorMessages={['Este campo es requerido']}
-                  disabled={isEditable === 'false'}
-                />
-                < TextField
                   label="Descripcion"
                   onChange={handleChange}
                   type="text"
@@ -372,7 +446,7 @@ const AddRecurso = () => {
             {
               !isEditable || isEditable !== 'false'
                 ? (
-                  < Button disabled={recurso.cantidad > recurso.stock ? true : ''} onClick={handleClick(TransitionRight)} color="primary" variant="contained" type="submit" >
+                  <Button disabled={recurso.cantidad > recurso.stock || parseInt(recurso.abastecimiento) > parseInt(recurso.cantidadComprar) ? true : ''} onClick={handleClick(TransitionRight)} color="primary" variant="contained" type="submit" >
                     <Icon>add_box</Icon>
                     <Span sx={{ pl: 1, textTransform: 'capitalize' }}>
                       {
