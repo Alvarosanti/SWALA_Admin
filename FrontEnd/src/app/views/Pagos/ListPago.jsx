@@ -117,7 +117,6 @@ const ListPago = () => {
                 (response) => {
                     setpagos(response.data.pagos)
                     setLoading(false)
-                    console.log(response.data.pagos)
                 },
                 (error) => {
                     console.log(error)

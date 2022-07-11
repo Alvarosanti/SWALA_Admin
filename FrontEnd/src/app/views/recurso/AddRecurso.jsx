@@ -186,8 +186,6 @@ const AddRecurso = () => {
   }
 
   let cantidadOc = recurso.cantidadComprar - newStock
-  console.log('cantidad comprar', recurso.cantidadComprar)
-  console.log('newStock', recurso.newStock)
   const ocCompra = () => {
 
     function generatorNumber(min, max) {
@@ -244,13 +242,6 @@ const AddRecurso = () => {
         )
     }
   }
-  console.log('recurso.cantidad > recurso.stock ', recurso.cantidad > recurso.stock)
-  console.log('recurso.abastecimiento > recurso.cantidadComprar', recurso.abastecimiento > recurso.cantidadComprar)
-
-  console.log('recurso.abastecimiento ', recurso.abastecimiento)
-  console.log('recurso.cantidadComprar', recurso.cantidadComprar)
-  console.log('umedida', uMedida)
-
 
   return (
     <Container>

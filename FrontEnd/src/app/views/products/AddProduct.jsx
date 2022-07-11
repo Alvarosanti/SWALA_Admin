@@ -60,7 +60,6 @@ const AddProduct = () => {
     if (idProduct !== null && isEditable !== null) {
       axios.get(`${apiUrl}/product/${idProduct}`)
         .then((response) => {
-          console.log(response.data.product)
           setProduct(response.data.product)
         },
           (error) => {
